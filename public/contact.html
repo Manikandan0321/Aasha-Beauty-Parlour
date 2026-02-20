@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact | Capturer</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Contact Page Styling */
+      .contact__section {
+        max-width: 700px;
+        margin: 120px auto 60px auto;
+        background: #fff;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .contact__section h2 {
+        text-align: center;
+        color: #111;
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-top: 15px;
+        font-weight: 500;
+        color: #111;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+        outline: none;
+      }
+
+      textarea {
+        resize: none;
+      }
+
+      button {
+        margin-top: 20px;
+        width: 100%;
+        padding: 12px;
+        background: #111;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background: #333;
+      }
+
+      footer {
+        background: #111;
+        color: white;
+        text-align: center;
+        padding: 15px;
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- 🧭 Navbar (same as index.html) -->
+    <header class="header-6" id="home">
+      <nav>
+        <div class="nav__header">
+          <div class="nav__logo">
+            <a href="/">
+              <img src="assets/N-removebg-preview.png" alt="logo" />
+            </a>
+          </div>
+          <div class="nav__menu__btn" id="menu-btn">
+            <i class="ri-menu-line"></i>
+          </div>
+        </div>
+        <ul class="nav__links" id="nav-links">
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="about.html">ABOUT US</a></li>
+          <li><a href="service.html">SERVICES</a></li>
+          <li class="nav__logo">
+            <a href="/">
+              <img src="assets/N-removebg-preview.png" alt="logo" />
+            </a>
+          </li>
+          <li><a href="client.html">CLIENT</a></li>
+          <li><a href="blog.html">BLOG</a></li>
+          <li><a href="contact.html" class="active">CONTACT US</a></li>
+        </ul>
+      </nav>
+       <div class="section__containers about__container" id="about">
+      <h2 class="section__headers">WE CAPTURE THE MOMENTS</h2>
+      <p class="section__descriptions">
+        At Capturer, we specialize in freezing those fleeting moments in time
+        that hold immense significance for you. With our passion for photography
+        and keen eye for detail, we transform ordinary moments into
+        extraordinary memories.
+      </p>
+       <p class="section__descriptions">
+        Whether it's a milestone event, a candid portrait, or the breathtaking
+        beauty of nature, we strive to encapsulate the essence of every moment,
+        ensuring that your cherished memories last a lifetime. Trust us to
+        capture the magic of your life's journey, one frame at a time.
+      </p>
+      
+      </div>
+    </header>
+
+    <!-- 📞 Contact Form -->
+   <section class="section__container" style="margin-top: 100px;">
+  <h2 class="section__header">Book Your Event</h2>
+
+  <form id="contactForm">
+    <label>Name</label>
+    <input type="text" id="name" required />
+
+    <label>Email</label>
+    <input type="email" id="email" required />
+
+    <label>Phone</label>
+    <input type="text" id="phone" required />
+
+    <label>Event Type</label>
+    <input type="text" id="event" placeholder="Wedding, Birthday, etc." required />
+
+    <label>Date</label>
+    <input type="date" id="date" required />
+
+    <label>Time</label>
+    <input type="time" id="time" required />
+
+    <label>Place</label>
+    <input type="text" id="place" required />
+
+    <label>Message</label>
+    <textarea id="message" rows="4" required></textarea>
+
+    <h3 style="margin-top: 25px;">Choose Equipment Needed</h3>
+    <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+      <div>
+        <label>📸 Camera (quantity)</label>
+        <input type="number" id="camera" min="0" placeholder="e.g., 2" />
+      </div>
+
+      <div>
+        <label>🚁 Drone (quantity)</label>
+        <input type="number" id="drone" min="0" placeholder="e.g., 1" />
+      </div>
+
+      <div>
+        <label>💡 Focus Light (quantity)</label>
+        <input type="number" id="light" min="0" placeholder="e.g., 4" />
+      </div>
+    </div>
+
+    <button type="submit" class="btn" style="margin-top:20px;">Submit Request</button>
+  </form>
+
+  <p id="responseMsg" style="margin-top: 20px; color: green; font-weight: bold;"></p>
+</section>
+
+
+    <footer>
+      &copy; 2025 Capturer. All Rights Reserved.
+    </footer>
+
+    <script>
+      const menuBtn = document.getElementById("menu-btn");
+      const navLinks = document.getElementById("nav-links");
+      menuBtn.addEventListener("click", () => {
+        navLinks.classList.toggle("open");
+      });
+
+  document.getElementById("contactForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const data = {
+      name: document.getElementById("name").value,
+      email: document.getElementById("email").value,
+      phone: document.getElementById("phone").value,
+      event: document.getElementById("event").value,
+      date: document.getElementById("date").value,
+      time: document.getElementById("time").value,
+      place: document.getElementById("place").value,
+      message: document.getElementById("message").value,
+      products: {
+        camera: document.getElementById("camera").value || 0,
+        drone: document.getElementById("drone").value || 0,
+        light: document.getElementById("light").value || 0,
+      },
+    };
+
+    const res = await fetch("/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+    document.getElementById("responseMsg").textContent = result.message;
+    document.getElementById("contactForm").reset();
+  });
+
+
+    </script>
+  </body>
+</html>

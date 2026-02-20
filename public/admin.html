@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> Black Feather Studio</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .top-bar {
+      background: #000;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      
+    }
+    .top-bar img {
+  height: 120px;     
+  width: auto;
+  object-fit: contain;
+  margin-top: 5px;
+}
+
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      padding: 10px;
+      background: #fff;
+      border-bottom: 1px solid #ccc;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .tab-btn {
+      padding: 8px 15px;
+      background: #e4e4e4;
+      border-radius: 5px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      font-weight: bold;
+    }
+    .tab-btn.active {
+      background: black;
+      color: white;
+    }
+
+    .tab-panel {
+      display: none;
+      padding: 20px;
+    }
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* SEARCH BOX */
+    .search-box {
+      text-align: right;
+      margin-bottom: 10px;
+    }
+    .search-box input {
+      width: 250px;
+      padding: 6px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+    }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      background: white;
+      border-collapse: collapse;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    th {
+      background: #111;
+      color: white;
+      padding: 10px;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #e1e1e1;
+      text-align: center;
+    }
+
+    button {
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      margin: 2px;
+    }
+
+    .view-btn { background: #28a745; }
+    .edit-btn { background: #f39c12; }
+    .delete-btn { background: #e74c3c; }
+    .confirm-btn { background: #007bff; }
+    .bill-btn { background: #6f42c1; }
+    .pay-btn { background: #8b32d4; }
+    .restore-btn { background: #17a2b8; }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .modal-content {
+      background: white;
+      width: 380px;
+      padding: 20px;
+      border-radius: 8px;
+      position: relative;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      font-size: 18px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .modal-content input, select {
+      width: 100%;
+      padding: 7px;
+      margin-top: 6px;
+      border-radius: 5px;
+      border: 1px solid #aaa;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="top-bar">
+  <a href="#">
+              <img src="assets/N-removebg-preview.png" alt="logo" />
+            </a>
+  </div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab-btn active" data-tab="pending">Pending</div>
+  <div class="tab-btn" data-tab="confirmed">Confirmed</div>
+  <div class="tab-btn" data-tab="payments">Payments</div>
+  <div class="tab-btn" data-tab="deleted">Deleted</div>
+</div>
+
+<!-- PANELS -->
+<div id="pending" class="tab-panel active">
+  <div class="search-box">
+    <input id="searchPending" placeholder="Search pending..." onkeyup="renderPending()" />
+  </div>
+  <div id="pendingTableWrap"></div>
+</div>
+
+<div id="confirmed" class="tab-panel">
+  <div class="search-box">
+    <input id="searchConfirmed" placeholder="Search confirmed..." onkeyup="renderConfirmed()" />
+  </div>
+  <div id="confirmedTableWrap"></div>
+</div>
+
+<div id="payments" class="tab-panel">
+  <div class="search-box">
+    <input id="searchPayments" placeholder="Search payments..." onkeyup="renderPayments()" />
+  </div>
+  <div id="paymentsWrap"></div>
+</div>
+
+<div id="deleted" class="tab-panel">
+  <div class="search-box">
+    <input id="searchDeleted" placeholder="Search deleted..." onkeyup="renderDeleted()" />
+  </div>
+  <div id="deletedWrap"></div>
+</div>
+
+<!-- DETAILS MODAL -->
+<div id="detailsModal" class="modal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeModal()">×</button>
+    <h3>Details</h3>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div id="paymentModal" class="modal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closePaymentModal()">×</button>
+    <h3>Record Payment</h3>
+    <div id="paymentContent"></div>
+  </div>
+</div>
+
+<script>
+/* ---------------- TAB SWITCHING ---------------- */
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+    document.getElementById(btn.dataset.tab).classList.add("active");
+
+    if (btn.dataset.tab === "payments") loadPayments();
+    if (btn.dataset.tab === "deleted") loadDeleted();
+  };
+});
+
+/* ---------------- LOAD DATA ---------------- */
+let allData = [];
+let paymentData = [];
+let deletedData = [];
+
+async function loadData() {
+  const res = await fetch("/data");
+  allData = await res.json();
+  renderPending();
+  renderConfirmed();
+}
+
+/* ---------------- PENDING ---------------- */
+function renderPending() {
+  const t = document.getElementById("searchPending").value.toLowerCase();
+  const list = allData.filter(d => !d.confirmed && d.name.toLowerCase().includes(t));
+
+  let html = `<table><tr>
+    <th>#</th><th>Name</th><th>Event</th><th>Date</th><th>Actions</th>
+   </tr>`;
+
+  list.forEach((item, index) => {
+    const i = allData.indexOf(item);
+    html += `
+    <tr>
+      <td>${i+1}</td>
+      <td>${item.name}</td>
+      <td>${item.event}</td>
+      <td>${item.date}</td>
+      <td>
+        <button class="view-btn" onclick="viewDetails(${i})">View</button>
+        <button class="edit-btn" onclick="editCustomer(${i})">Edit</button>
+        <button class="confirm-btn" onclick="confirmPrice(${i})">Confirm</button>
+        <button class="delete-btn" onclick="deleteCustomer(${i})">Delete</button>
+      </td>
+    </tr>`;
+  });
+
+  html += `</table>`;
+  document.getElementById("pendingTableWrap").innerHTML = html;
+}
+
+/* ---------------- CONFIRMED ---------------- */
+function renderConfirmed() {
+  const t = document.getElementById("searchConfirmed").value.toLowerCase();
+  const list = allData.filter(d => d.confirmed && d.name.toLowerCase().includes(t));
+
+  let html = `<table><tr>
+    <th>#</th><th>Name</th><th>Event</th><th>Price</th><th>Actions</th>
+   </tr>`;
+
+  list.forEach((item, idx) => {
+    const i = allData.indexOf(item);
+    html += `
+    <tr>
+      <td>${i+1}</td>
+      <td>${item.name}</td>
+      <td>${item.event}</td>
+      <td>₹${item.price}</td>
+      <td>
+        <button class="view-btn" onclick="viewDetails(${i})">View</button>
+        <button class="bill-btn" onclick="openBill(${i})">Bill</button>
+        <button class="pay-btn" onclick="openPayment(${i})">Pay</button>
+        <button class="delete-btn" onclick="deleteCustomer(${i})">Delete</button>
+      </td>
+    </tr>`;
+  });
+
+  html += `</table>`;
+  document.getElementById("confirmedTableWrap").innerHTML = html;
+}
+
+/* ---------------- PAYMENT ---------------- */
+async function loadPayments() {
+  const res = await fetch("/payments");
+  paymentData = await res.json();
+  renderPayments();
+}
+
+function renderPayments() {
+  const t = document.getElementById("searchPayments").value.toLowerCase();
+
+  let html = `<table><tr>
+    <th>#</th><th>Name</th><th>Event</th><th>Amount</th><th>Method</th><th>Date</th>
+   </tr>`;
+
+  paymentData.filter(p => p.bookingName.toLowerCase().includes(t)).forEach((p, i) => {
+    html += `
+    <tr>
+      <td>${i+1}</td>
+      <td>${p.bookingName}</td>
+      <td>${p.event}</td>
+      <td>₹${p.amount}</td>
+      <td>${p.method}</td>
+      <td>${p.paidAt}</td>
+    </tr>`;
+  });
+
+  html += `</table>`;
+  document.getElementById("paymentsWrap").innerHTML = html;
+}
+
+/* ---------------- DELETED ---------------- */
+async function loadDeleted() {
+  const res = await fetch("/deleted");
+  deletedData = await res.json();
+  renderDeleted();
+}
+
+function renderDeleted() {
+  const t = document.getElementById("searchDeleted").value.toLowerCase();
+
+  let html = `<table><tr>
+    <th>#</th><th>Name</th><th>Event</th><th>Deleted</th><th>Actions</th>
+   </tr>`;
+
+  deletedData
+    .filter(d => d.name.toLowerCase().includes(t))
+    .forEach((d, i) => {
+      html += `
+      <tr>
+        <td>${i+1}</td>
+        <td>${d.name}</td>
+        <td>${d.event}</td>
+        <td>${d.deletedAt}</td>
+        <td>
+          <button class="restore-btn" onclick="restore(${i})">Restore</button>
+          <button class="delete-btn" onclick="permanentDelete(${i})">Delete</button>
+        </td>
+      </tr>`;
+    });
+
+  html += `</table>`;
+  document.getElementById("deletedWrap").innerHTML = html;
+}
+
+/* ---------------- MODALS ---------------- */
+function viewDetails(i) {
+  const c = allData[i];
+  document.getElementById("modalContent").innerHTML = `
+    <p><b>Name:</b> ${c.name}</p>
+    <p><b>Email:</b> ${c.email}</p>
+    <p><b>Phone:</b> ${c.phone}</p>
+    <p><b>Event:</b> ${c.event}</p>
+    <p><b>Date:</b> ${c.date} ${c.time}</p>
+    <p><b>Place:</b> ${c.place}</p>
+    <p><b>Message:</b> ${c.message}</p>
+  `;
+  document.getElementById("detailsModal").style.display = "flex";
+}
+function closeModal() {
+  document.getElementById("detailsModal").style.display = "none";
+}
+
+/* ---------------- PAYMENT MODAL ---------------- */
+function openPayment(i) {
+  const c = allData[i];
+  document.getElementById("paymentContent").innerHTML = `
+    <p><b>Name:</b> ${c.name}</p>
+    <p><b>Total Amount:</b> ₹${c.price}</p>
+
+    <label>Amount Paid</label>
+    <input id="payAmount" type="number" value="${c.price}" />
+
+    <label>Payment Method</label>
+    <select id="payMethod" onchange="switchPaymentUI()">
+      <option value="">Select</option>
+      <option value="UPI">UPI</option>
+      <option value="Cash">Cash</option>
+      <option value="Bank">Bank</option>
+    </select>
+
+    <div id="extraPaymentFields"></div>
+
+    <button class="confirm-btn" onclick="savePayment(${i})" style="margin-top:12px;width:100%;">Save Payment</button>
+  `;
+  document.getElementById("paymentModal").style.display = "flex";
+}
+
+function closePaymentModal() {
+  document.getElementById("paymentModal").style.display = "none";
+}
+
+/* ---------------- PAYMENT UI SWITCH ---------------- */
+function switchPaymentUI() {
+  const method = document.getElementById("payMethod").value;
+  const extra = document.getElementById("extraPaymentFields");
+
+  if (method === "UPI") {
+    extra.innerHTML = `
+      <label>Upload UPI Screenshot</label>
+      <input type="file" id="upiScreenshot" accept="image/*" />
+    `;
+  } 
+  else if (method === "Cash") {
+    extra.innerHTML = `
+      <label>Received By</label>
+      <input type="text" id="cashReceiver" placeholder="Name of receiver" />
+    `;
+  } 
+  else if (method === "Bank") {
+    extra.innerHTML = `
+      <label>Transaction ID</label>
+      <input type="text" id="bankTxnId" placeholder="Enter transaction ID" />
+    `;
+  } 
+  else {
+    extra.innerHTML = "";
+  }
+}
+
+/* ---------------- PAYMENT SAVE ---------------- */
+async function savePayment(i) {
+  const amount = document.getElementById("payAmount").value;
+  const method = document.getElementById("payMethod").value;
+
+  let extra = {};
+
+  if (method === "UPI") {
+    extra.screenshot = document.getElementById("upiScreenshot")?.value || "";
+  }
+
+  if (method === "Cash") {
+    extra.receivedBy = document.getElementById("cashReceiver")?.value || "";
+  }
+
+  if (method === "Bank") {
+    extra.bankTxnId = document.getElementById("bankTxnId")?.value || "";
+  }
+
+  await fetch(`/payment/${i}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ amount, method, ...extra })
+  });
+
+  alert("Payment Saved");
+  closePaymentModal();
+  loadPayments();
+}
+
+/* ---------------- DELETE / RESTORE ---------------- */
+async function deleteCustomer(i) {
+  if (!confirm("Move customer to deleted list?")) return;
+  await fetch(`/delete/${i}`, { method: "DELETE" });
+  loadData();
+}
+
+async function restore(i) {
+  await fetch(`/restore/${i}`, { method: "POST" });
+  loadDeleted();
+  loadData();
+}
+
+async function permanentDelete(i) {
+  if (!confirm("Permanently delete?")) return;
+  await fetch(`/delete-permanent/${i}`, { method: "DELETE" });
+  loadDeleted();
+}
+
+/* ---------------- OTHER ---------------- */
+async function editCustomer(i) {
+  const c = allData[i];
+  const newDate = prompt("New date", c.date);
+  const newTime = prompt("New time", c.time);
+
+  c.date = newDate;
+  c.time = newTime;
+
+  await fetch(`/edit/${i}`, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(c)
+  });
+
+  loadData();
+}
+
+async function confirmPrice(i) {
+  const price = prompt("Enter price (₹)");
+  if (!price) return;
+
+  await fetch(`/confirm/${i}`, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ price })
+  });
+
+  loadData();
+}
+
+function openBill(i) {
+  window.open(`/bill/${i}`, "_blank");
+}
+
+/* INIT */
+loadData();
+setInterval(loadData, 5000);
+</script>
+
+</body>
+</html>

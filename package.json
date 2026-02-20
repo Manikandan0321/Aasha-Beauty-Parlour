@@ -1,0 +1,20 @@
+{
+  "name": "capturer_23-03-24-main",
+  "version": "1.0.0",
+  "description": "Elevate your photography portfolio with our comprehensive tutorial on building a stunning website using HTML, CSS, and JavaScript!",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "nodemailer": "^7.0.10"
+  }
+}
