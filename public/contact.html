@@ -1,92 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact | Capturer</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-    />
-    <link rel="stylesheet" href="styles.css" />
-    <style>
-      /* Contact Page Styling */
-      .contact__section {
-        max-width: 700px;
-        margin: 120px auto 60px auto;
-        background: #fff;
-        padding: 40px;
-        border-radius: 12px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | Aasha Men & Women Beauty Parlour</title>
 
-      .contact__section h2 {
-        text-align: center;
-        color: #111;
-        margin-bottom: 20px;
-      }
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css" />
 
-      label {
-        display: block;
-        margin-top: 15px;
-        font-weight: 500;
-        color: #111;
-      }
+  <style>
+    .section__container {
+      max-width: 800px;
+      margin: 120px auto 60px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+    }
 
-      input,
-      textarea {
-        width: 100%;
-        padding: 10px;
-        margin-top: 6px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        font-size: 1rem;
-        outline: none;
-      }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 500;
+      color: #111;
+    }
 
-      textarea {
-        resize: none;
-      }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      outline: none;
+    }
 
-      button {
-        margin-top: 20px;
-        width: 100%;
-        padding: 12px;
-        background: #111;
-        color: #fff;
-        border: none;
-        border-radius: 6px;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: 0.3s;
-      }
+    textarea { resize: none; }
 
-      button:hover {
-        background: #333;
-      }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-      footer {
-        background: #111;
-        color: white;
-        text-align: center;
-        padding: 15px;
-        margin-top: 50px;
-      }
-    </style>
-  </head>
+    button:hover { background: #333; }
 
-  <body>
-    <!-- 🧭 Navbar (same as index.html) -->
-    <header class="header-6" id="home">
+    .map__section {
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    .map__section iframe {
+      width: 100%;
+      height: 350px;
+      border: 0;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .status {
+      font-weight: bold;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+
+    footer {
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 50px;
+    }
+
+    /* Floating WhatsApp */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25D366;
+      color: white;
+      font-size: 28px;
+      padding: 12px 15px;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 1000;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+ <header class="header-1" id="home">
       <nav>
         <div class="nav__header">
           <div class="nav__logo">
-            <a href="/">
-              <img src="assets/N-removebg-preview.png" alt="logo" />
+            <a href="#">
+              <img src="assets/logo-1.png" alt="logo" />
             </a>
           </div>
           <div class="nav__menu__btn" id="menu-btn">
@@ -94,43 +112,30 @@
           </div>
         </div>
         <ul class="nav__links" id="nav-links">
-          <li><a href="index.html">HOME</a></li>
+          <li><a href="#home">HOME</a></li>
           <li><a href="about.html">ABOUT US</a></li>
           <li><a href="service.html">SERVICES</a></li>
           <li class="nav__logo">
-            <a href="/">
-              <img src="assets/N-removebg-preview.png" alt="logo" />
+            <a href="#">
+              <img src="assets/logo-1.png" alt="logo" />
             </a>
           </li>
-          <li><a href="client.html">CLIENT</a></li>
-          <li><a href="blog.html">BLOG</a></li>
-          <li><a href="contact.html" class="active">CONTACT US</a></li>
+          <li><a href="client.html">REVIEWS</a></li>
+          <li><a href="blog.html">BEAUTY TIPS</a></li>
+          <li><a href="contact.html">CONTACT US</a></li>
         </ul>
       </nav>
-       <div class="section__containers about__container" id="about">
-      <h2 class="section__headers">WE CAPTURE THE MOMENTS</h2>
-      <p class="section__descriptions">
-        At Capturer, we specialize in freezing those fleeting moments in time
-        that hold immense significance for you. With our passion for photography
-        and keen eye for detail, we transform ordinary moments into
-        extraordinary memories.
-      </p>
-       <p class="section__descriptions">
-        Whether it's a milestone event, a candid portrait, or the breathtaking
-        beauty of nature, we strive to encapsulate the essence of every moment,
-        ensuring that your cherished memories last a lifetime. Trust us to
-        capture the magic of your life's journey, one frame at a time.
-      </p>
-      
-      </div>
     </header>
 
-    <!-- 📞 Contact Form -->
-   <section class="section__container" style="margin-top: 100px;">
-  <h2 class="section__header">Book Your Event</h2>
+<!-- Contact Section -->
+<section class="section__container">
+
+  <p id="status" class="status"></p>
+
+  <h2>Salon Appointment Form</h2>
 
   <form id="contactForm">
-    <label>Name</label>
+    <label>Full Name</label>
     <input type="text" id="name" required />
 
     <label>Email</label>
@@ -139,88 +144,104 @@
     <label>Phone</label>
     <input type="text" id="phone" required />
 
-    <label>Event Type</label>
-    <input type="text" id="event" placeholder="Wedding, Birthday, etc." required />
+    <label>Select Service</label>
+    <select id="service" required>
+      <option value="">-- Choose Service --</option>
+      <option>Haircut</option>
+      <option>Hair Coloring</option>
+      <option>Facial</option>
+      <option>Bridal Makeup</option>
+      <option>Beard Grooming</option>
+      <option>Skin Treatment</option>
+    </select>
 
-    <label>Date</label>
+    <label>Preferred Date</label>
     <input type="date" id="date" required />
 
-    <label>Time</label>
+    <label>Preferred Time</label>
     <input type="time" id="time" required />
 
-    <label>Place</label>
-    <input type="text" id="place" required />
+    <label>Message (Optional)</label>
+    <textarea id="message" rows="4"></textarea>
 
-    <label>Message</label>
-    <textarea id="message" rows="4" required></textarea>
-
-    <h3 style="margin-top: 25px;">Choose Equipment Needed</h3>
-    <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
-      <div>
-        <label>📸 Camera (quantity)</label>
-        <input type="number" id="camera" min="0" placeholder="e.g., 2" />
-      </div>
-
-      <div>
-        <label>🚁 Drone (quantity)</label>
-        <input type="number" id="drone" min="0" placeholder="e.g., 1" />
-      </div>
-
-      <div>
-        <label>💡 Focus Light (quantity)</label>
-        <input type="number" id="light" min="0" placeholder="e.g., 4" />
-      </div>
-    </div>
-
-    <button type="submit" class="btn" style="margin-top:20px;">Submit Request</button>
+    <button type="submit">Book Appointment</button>
   </form>
 
-  <p id="responseMsg" style="margin-top: 20px; color: green; font-weight: bold;"></p>
+  <p id="responseMsg" style="margin-top:20px;color:green;font-weight:bold;"></p>
+
+  <!-- Map Section -->
+  <div class="map__section">
+    <h3>📍 Our Location</h3>
+    <iframe
+      loading="lazy"
+      allowfullscreen
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3897.4669569815697!2d78.0917614!3d9.5098752!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0130190ae57f31%3A0x5361fde543122a33!2sAasha%20Beauty%20Parlour%20men%20and%20women!5e0!3m2!1sen!2sin!4v1708123456789!5m2!1sen!2sin">
+    </iframe>
+  </div>
+
 </section>
 
+<footer>
+  &copy; 2025 Aasha Men & Women Beauty Parlour. All Rights Reserved.
+</footer>
 
-    <footer>
-      &copy; 2025 Capturer. All Rights Reserved.
-    </footer>
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/919080734683" target="_blank" class="whatsapp-float">
+  <i class="ri-whatsapp-line"></i>
+</a>
 
-    <script>
-      const menuBtn = document.getElementById("menu-btn");
-      const navLinks = document.getElementById("nav-links");
-      menuBtn.addEventListener("click", () => {
-        navLinks.classList.toggle("open");
-      });
-
-  document.getElementById("contactForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const data = {
-      name: document.getElementById("name").value,
-      email: document.getElementById("email").value,
-      phone: document.getElementById("phone").value,
-      event: document.getElementById("event").value,
-      date: document.getElementById("date").value,
-      time: document.getElementById("time").value,
-      place: document.getElementById("place").value,
-      message: document.getElementById("message").value,
-      products: {
-        camera: document.getElementById("camera").value || 0,
-        drone: document.getElementById("drone").value || 0,
-        light: document.getElementById("light").value || 0,
-      },
-    };
-
-    const res = await fetch("/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-
-    const result = await res.json();
-    document.getElementById("responseMsg").textContent = result.message;
-    document.getElementById("contactForm").reset();
+<script>
+  // Navbar toggle
+  const menuBtn = document.getElementById("menu-btn");
+  const navLinks = document.getElementById("nav-links");
+  menuBtn.addEventListener("click", () => {
+    navLinks.classList.toggle("open");
   });
 
+  // Open / Close Status
+  function updateStatus() {
+    const now = new Date();
+    const hour = now.getHours();
+    const statusElement = document.getElementById("status");
 
-    </script>
-  </body>
+    if (hour >= 9 && hour < 20) {
+      statusElement.textContent = "🟢 We are Open Now (9AM - 8PM)";
+      statusElement.style.color = "green";
+    } else {
+      statusElement.textContent = "🔴 We are Closed Now (Opens at 9AM)";
+      statusElement.style.color = "red";
+    }
+  }
+  updateStatus();
+
+  // WhatsApp Booking
+  document.getElementById("contactForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+    const service = document.getElementById("service").value;
+    const date = document.getElementById("date").value;
+    const time = document.getElementById("time").value;
+
+    const message = `New Appointment Booking:
+Name: ${name}
+Phone: ${phone}
+Service: ${service}
+Date: ${date}
+Time: ${time}`;
+
+    const whatsappNumber = "919080734683"; // Replace with your number
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+    window.open(url, "_blank");
+
+    document.getElementById("responseMsg").textContent =
+      "Redirecting to WhatsApp for confirmation...";
+
+    document.getElementById("contactForm").reset();
+  });
+</script>
+
+</body>
 </html>
