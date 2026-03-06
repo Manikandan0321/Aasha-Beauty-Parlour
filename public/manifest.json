@@ -1,19 +1,20 @@
 {
   "name": "Aasha Beauty Parlour",
-  "short_name": "Aasha",
+  "short_name": "Aasha Parlour",
+  "description": "Aasha Beauty Parlour - Professional beauty services for men and women including bridal makeup, hair styling, facials and skincare.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "theme_color": "#d63384",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "assets/icon-192.png",
+      "src": "/assets/icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "assets/icon-512.png",
+      "src": "/assets/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
