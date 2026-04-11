@@ -7,6 +7,7 @@ import path from "path";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
+import OpenAI from "openai";
 
 dotenv.config();
 const app = express();

@@ -197,16 +197,18 @@
     <section class="section__container instagram__container">
       <h2 class="section__header">~ INSTAGRAM ~</h2>
       <div class="instagram__flex">
-        <img src="assets/img-1.jpg" alt="instagram" />
-        <img src="assets/img-2.jpg" alt="instagram" />
-        <img src="assets/img-3.jpg" alt="instagram" />
-        <img src="assets/img-5.jpg" alt="instagram" />
-        <img src="assets/img-6.jpg" alt="instagram" />
-        <img src="assets/img-7.webp" alt="instagram" />
-        <img src="assets/img-8.jpg" alt="instagram" />
-        <img src="assets/img-9.jpg" alt="instagram" />
+        <img src="assets/inst-1.jpeg" alt="instagram" />
+        <img src="assets/inst-2.jpeg" alt="instagram" />
+        <img src="assets/inst-3.jpeg" alt="instagram" />
+        <img src="assets/inst-4.jpeg" alt="instagram" />
+        <img src="assets/inst-5.jpeg" alt="instagram" />
+        <img src="assets/inst-6.jpeg" alt="instagram" />
+        <img src="assets/inst-7.jpeg" alt="instagram" />
+        <img src="assets/inst-8.jpeg" alt="instagram" />
       </div>
     </section>
+
+    
 
    <footer>
       <div class="section__container footer__container">
@@ -242,7 +244,22 @@
         Copyright © 2025 Aasha Beauty Parlour. All Rights Reserved.
       </div>
     </footer>
+    
+    <!-- Chatbot Button -->
+<div id="chatbot-btn">💬</div>
 
+<!-- Chatbot Box -->
+<div id="chatbot">
+  <div class="chat-header">Aasha Assistant</div>
+
+  <div class="chat-body" id="chat-body">
+    <p><b>Bot:</b> Hello 👋 Welcome to Aasha Beauty Parlour.<br>
+    Ask about services, timing or beauty tips.</p>
+  </div>
+
+  <input type="text" id="chat-input" placeholder="Type your message..." />
+</div>
+    
     <script src="https://unpkg.com/scrollreveal"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="main.js"></script>
@@ -253,6 +270,48 @@ if ("serviceWorker" in navigator) {
 }
 </script>
 
+<script>
+
+const btn = document.getElementById("chatbot-btn");
+const chat = document.getElementById("chatbot");
+const input = document.getElementById("chat-input");
+const body = document.getElementById("chat-body");
+
+btn.onclick = () => {
+  chat.style.display = chat.style.display === "flex" ? "none" : "flex";
+};
+
+input.addEventListener("keypress", function(e){
+  if(e.key === "Enter"){
+    
+    let userText = input.value.toLowerCase();
+    body.innerHTML += "<p><b>You:</b> "+input.value+"</p>";
+
+    let reply = "Sorry, I didn't understand.";
+
+    if(userText.includes("service"))
+      reply = "We offer haircut, facial, bridal makeup and grooming services.";
+
+    else if(userText.includes("time") || userText.includes("open"))
+      reply = "Our shop is open from 9 AM to 9 PM.";
+
+    else if(userText.includes("location"))
+      reply = "We are located near the main market area.";
+
+    else if(userText.includes("tip"))
+      reply = "Beauty tip: Drink water, use sunscreen and follow a skincare routine.";
+
+    else if(userText.includes("contact"))
+      reply = "You can contact us through the contact page on our website.";
+
+    body.innerHTML += "<p><b>Bot:</b> "+reply+"</p>";
+
+    input.value="";
+    body.scrollTop = body.scrollHeight;
+  }
+});
+
+</script>
 
   </body>
 
