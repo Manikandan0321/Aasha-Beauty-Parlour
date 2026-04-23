@@ -91,12 +91,22 @@ body {
 body {
   font-family: "Montserrat", sans-serif;
 }
+.header-1,
+.header-2,
+.header-3,
+.header-4,
+.header-5,
+.header-6,
+.header-7,
+.header-8 {
+  image-rendering: auto;
+}
 
 .header-1 {
  height: 100vh;
   width: 100%;
 
-  background-image: radial-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.9)),
+  background-image: radial-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.5)),
     url("assets/header-1.avif");
   background-position: center;
   background-size:cover;
@@ -117,7 +127,7 @@ body {
   width: 100%;
 
   background-image: radial-gradient(rgba(255,255,255,0), rgba(0,0,0,0.8)),
-  url("assets/header-3.jpeg");
+  url("assets/inst-1.jpeg");
 
   background-size: cover;
   background-position: center;
@@ -147,7 +157,7 @@ body {
   width: 100%;
 
   background-image: radial-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.9)),
-    url("assets/header-6.jpg");
+    url("assets/header-6.jpeg");
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -268,15 +278,19 @@ nav {
 }
 
 .portfolio__card:nth-child(1)::after {
-  content: "Gents";
+  content: "Bridal makeup";
 }
 
 .portfolio__card:nth-child(2)::after {
-  content: "Ladies";
+  content: "Hair styling";
 }
 
+
 .portfolio__card:nth-child(3)::after {
-  content: "Grooming";
+  content: "Manicure & Pedicure";
+}
+.portfolio__card:nth-child(4)::after {
+  content: "Facial & Skin care";
 }
 
 .portfolio__content {

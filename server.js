@@ -1,4 +1,3 @@
-// server.js (REPLACE your existing file)
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -9,27 +8,43 @@ import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import OpenAI from "openai";
 
-dotenv.config();
-const app = express();
+// Fix __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Load ENV
+dotenv.config({ path: path.join(__dirname, ".env") });
+
+console.log("AI KEY:", process.env.OPENAI_API_KEY ? "Loaded ✅" : "Missing ❌");
+
+const app = express();
+
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
+// OpenAI Setup
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+// File paths
 const dataFile = path.join(__dirname, "contactData.json");
 const deletedFile = path.join(__dirname, "deletedData.json");
 const paymentFile = path.join(__dirname, "paymentData.json");
 
-// create files if not exist
+// Create files if not exist
 if (!fs.existsSync(dataFile)) fs.writeFileSync(dataFile, JSON.stringify([], null, 2));
 if (!fs.existsSync(deletedFile)) fs.writeFileSync(deletedFile, JSON.stringify([], null, 2));
 if (!fs.existsSync(paymentFile)) fs.writeFileSync(paymentFile, JSON.stringify([], null, 2));
 
-let newMessageFlag = false;
+// Helpers
+const readJSON = (file) => JSON.parse(fs.readFileSync(file));
+const writeJSON = (file, data) => fs.writeFileSync(file, JSON.stringify(data, null, 2));
 
-// nodemailer transporter (requires .env GMAIL_USER, GMAIL_APP_PASS, ADMIN_EMAIL)
+// Mail setup
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -38,307 +53,186 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Helper read/write
-const readJSON = (file) => JSON.parse(fs.readFileSync(file));
-const writeJSON = (file, data) => fs.writeFileSync(file, JSON.stringify(data, null, 2));
+// ------------------- 🤖 AI CHAT -------------------
+app.post("/ask-ai", async (req, res) => {
+  try {
+    const { message } = req.body;
 
-// Submit contact form
-app.post("/submit", async (req, res) => {
-  const { name, email, phone, event, date, time, place, message, products } = req.body;
-  const data = readJSON(dataFile);
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a beauty parlour assistant. Answer about services, pricing, skincare and booking simply.",
+        },
+        { role: "user", content: message },
+      ],
+    });
 
-  const newEntry = {
-    name: name || "",
-    email: email || "",
-    phone: phone || "",
-    event: event || "",
-    date: date || "",
-    time: time || "",
-    place: place || "",
-    message: message || "",
-    products: products || { camera: 0, drone: 0, light: 0 },
-    price: 0,
-    confirmed: false,
-    submittedAt: new Date().toLocaleString(),
-  };
+    res.json({ reply: response.choices[0].message.content });
 
-  data.push(newEntry);
-  writeJSON(dataFile, data);
-  newMessageFlag = true;
-
-  // send admin notification (best-effort)
-  if (process.env.ADMIN_EMAIL && process.env.GMAIL_USER && process.env.GMAIL_APP_PASS) {
-    const mailOptions = {
-      from: `"Black Feather Studio" <${process.env.GMAIL_USER}>`,
-      to: process.env.ADMIN_EMAIL,
-      subject: "📩 New Event Enquiry Received!",
-      html: `<h3>New booking request</h3><p><b>Name:</b> ${newEntry.name}</p><p><b>Event:</b> ${newEntry.event}</p>`,
-    };
-    transporter.sendMail(mailOptions).catch(err => console.error("Mail error:", err.message));
+  } catch (error) {
+    console.error("AI ERROR:", error.message);
+    res.json({ reply: "AI busy 😢 try later" });
   }
-
-  res.json({ message: "✅ Request submitted!" });
 });
 
-// Get all active bookings
-app.get("/data", (req, res) => {
-  res.json(readJSON(dataFile));
+// ------------------- 📩 SUBMIT (MAIN UPDATE) -------------------
+app.post("/submit", async (req, res) => {
+  try {
+    const data = readJSON(dataFile);
+
+    const newEntry = {
+      ...req.body,
+      price: 0,
+      confirmed: false,
+      submittedAt: new Date().toLocaleString(),
+    };
+
+    data.push(newEntry);
+    writeJSON(dataFile, data);
+
+    // 📧 SEND EMAIL (FULL DETAILS)
+    if (process.env.ADMIN_EMAIL) {
+      await transporter.sendMail({
+        from: `"Aasha Beauty Parlour" <${process.env.GMAIL_USER}>`,
+        to: process.env.ADMIN_EMAIL,
+        subject: "💄 New Appointment Booking",
+        html: `
+          <h2>New Booking Received</h2>
+          <p><b>Name:</b> ${newEntry.name}</p>
+          <p><b>Email:</b> ${newEntry.email}</p>
+          <p><b>Phone:</b> ${newEntry.phone}</p>
+          <p><b>Service:</b> ${newEntry.service}</p>
+          <p><b>Date:</b> ${newEntry.date}</p>
+          <p><b>Time:</b> ${newEntry.time}</p>
+          <p><b>Message:</b> ${newEntry.message || "-"}</p>
+          <hr/>
+          <p><i>Submitted at: ${newEntry.submittedAt}</i></p>
+        `,
+      });
+
+      console.log("📧 Email sent successfully");
+    }
+
+    res.json({ message: "✅ Booking Saved & Email Sent!" });
+
+  } catch (err) {
+    console.log("Submit Error:", err.message);
+    res.json({ message: "Saved but email failed ❌" });
+  }
 });
 
-// Get deleted bookings (trash)
-app.get("/deleted", (req, res) => {
-  res.json(readJSON(deletedFile));
-});
+// ------------------- 📊 DATA -------------------
+app.get("/data", (req, res) => res.json(readJSON(dataFile)));
+app.get("/deleted", (req, res) => res.json(readJSON(deletedFile)));
+app.get("/payments", (req, res) => res.json(readJSON(paymentFile)));
 
-// Get all payments
-app.get("/payments", (req, res) => {
-  res.json(readJSON(paymentFile));
-});
-
-// Confirm a booking (set price) - expects { price }
-app.post("/confirm/:index", async (req, res) => {
+// ------------------- CONFIRM -------------------
+app.post("/confirm/:index", (req, res) => {
   const index = parseInt(req.params.index);
-  const { price } = req.body || {};
   const data = readJSON(dataFile);
 
-  if (index < 0 || index >= data.length) return res.status(404).json({ message: "Invalid index" });
+  if (index < 0 || index >= data.length)
+    return res.status(404).json({ message: "Invalid index" });
 
   data[index].confirmed = true;
-  if (price !== undefined) data[index].price = Number(price) || 0;
+  data[index].price = Number(req.body.price) || 0;
+
   writeJSON(dataFile, data);
-
-  // send confirmation mail to customer
-  const customer = data[index];
-  if (customer.email && process.env.GMAIL_USER && process.env.GMAIL_APP_PASS) {
-    const mailOptions = {
-      from: `"Black Feather Studio" <${process.env.GMAIL_USER}>`,
-      to: customer.email,
-      subject: "✅ Booking Confirmed - Black Feather Studio",
-      html: `
-        <h3>Hi ${customer.name || "Customer"},</h3>
-        <p>Your booking for <b>${customer.event}</b> is confirmed.</p>
-        <p><b>Total:</b> ₹${customer.price || 0}</p>
-        <p>We will reach out shortly with more details.</p>
-      `,
-    };
-    transporter.sendMail(mailOptions).catch(err => console.error("Mail err:", err.message));
-  }
-
   res.json({ message: "✅ Confirmed" });
 });
 
-// Edit booking (replace object)
-app.post("/edit/:index", (req, res) => {
-  const index = parseInt(req.params.index);
-  const data = readJSON(dataFile);
-
-  if (index < 0 || index >= data.length) return res.status(404).json({ message: "Invalid index" });
-
-  // Keep confirmed/payment fields if not provided
-  const preserved = {
-    confirmed: data[index].confirmed,
-    price: data[index].price,
-    submittedAt: data[index].submittedAt,
-    products: data[index].products || { camera: 0, drone: 0, light: 0 }
-  };
-
-  const updated = { ...req.body, ...preserved };
-  data[index] = updated;
-  writeJSON(dataFile, data);
-  res.json({ message: "✅ Updated" });
-});
-
-// Move to deleted (trash) instead of permanent delete
+// ------------------- DELETE -------------------
 app.delete("/delete/:index", (req, res) => {
   const index = parseInt(req.params.index);
   const data = readJSON(dataFile);
   const deleted = readJSON(deletedFile);
 
-  if (index < 0 || index >= data.length) return res.status(404).json({ message: "Invalid index" });
+  if (index < 0 || index >= data.length)
+    return res.status(404).json({ message: "Invalid index" });
 
   const [removed] = data.splice(index, 1);
-  // add metadata to deleted record
   removed.deletedAt = new Date().toLocaleString();
+
   deleted.push(removed);
 
   writeJSON(dataFile, data);
   writeJSON(deletedFile, deleted);
 
-  res.json({ message: "🗑️ Moved to Deleted (Trash)" });
+  res.json({ message: "🗑️ Moved to Trash" });
 });
 
-// Restore from deleted back to active list (index = index in deleted file)
+// ------------------- RESTORE -------------------
 app.post("/restore/:index", (req, res) => {
   const index = parseInt(req.params.index);
   const data = readJSON(dataFile);
   const deleted = readJSON(deletedFile);
 
-  if (index < 0 || index >= deleted.length) return res.status(404).json({ message: "Invalid index" });
+  if (index < 0 || index >= deleted.length)
+    return res.status(404).json({ message: "Invalid index" });
 
   const [restored] = deleted.splice(index, 1);
-  // remove deletedAt
   delete restored.deletedAt;
+
   data.push(restored);
 
   writeJSON(dataFile, data);
   writeJSON(deletedFile, deleted);
 
-  res.json({ message: "✅ Restored successfully" });
+  res.json({ message: "✅ Restored" });
 });
 
-// Permanently delete from deleted file
+// ------------------- PERMANENT DELETE -------------------
 app.delete("/delete-permanent/:index", (req, res) => {
   const index = parseInt(req.params.index);
   const deleted = readJSON(deletedFile);
 
-  if (index < 0 || index >= deleted.length) return res.status(404).json({ message: "Invalid index" });
+  if (index < 0 || index >= deleted.length)
+    return res.status(404).json({ message: "Invalid index" });
 
   deleted.splice(index, 1);
   writeJSON(deletedFile, deleted);
+
   res.json({ message: "🗑️ Permanently deleted" });
 });
 
-// Record a payment against a booking (by active index)
+// ------------------- PAYMENT -------------------
 app.post("/payment/:index", (req, res) => {
   const index = parseInt(req.params.index);
-  const { amount, method, txnId, note } = req.body || {};
+  const { amount, method } = req.body;
+
   const data = readJSON(dataFile);
   const payments = readJSON(paymentFile);
 
-  if (index < 0 || index >= data.length) return res.status(404).json({ message: "Invalid index" });
+  if (index < 0 || index >= data.length)
+    return res.status(404).json({ message: "Invalid index" });
 
   const booking = data[index];
-  const paidAmount = Number(amount) || 0;
 
-  // create payment record
   const paymentRecord = {
     bookingIndex: index,
-    bookingName: booking.name || "",
-    bookingEmail: booking.email || "",
-    event: booking.event || "",
-    amount: paidAmount,
-    method: method || "unknown",
-    txnId: txnId || "",
-    note: note || "",
+    bookingName: booking.name,
+    event: booking.event,
+    amount: Number(amount),
+    method,
     paidAt: new Date().toLocaleString(),
   };
 
   payments.push(paymentRecord);
   writeJSON(paymentFile, payments);
 
-  res.json({ message: "✅ Payment recorded", payment: paymentRecord });
+  res.json({ message: "✅ Payment Saved" });
 });
 
-// Get bill (same as before) but now include payments summary for that booking
-app.get("/bill/:index", (req, res) => {
-  const index = parseInt(req.params.index);
-  const data = readJSON(dataFile);
-  const payments = readJSON(paymentFile);
-  if (index < 0 || index >= data.length) return res.send("Customer not found");
-
-  const c = data[index];
-  // sum payments for this booking (by matching bookingName+email+event is robust enough for small app)
-  const relatedPayments = payments.filter(p => p.bookingIndex === index || (p.bookingEmail === c.email && p.bookingName === c.name && p.event === c.event));
-  const paidTotal = relatedPayments.reduce((s, p) => s + Number(p.amount || 0), 0);
-  const balance = (Number(c.price || 0) - paidTotal);
-
-  const html = `
-  <html>
-  <head>
-    <title>Invoice - Black Feather Studio</title>
-    <style>
-      body { font-family: 'Poppins', sans-serif; background: #f5f6fa; margin:0; padding:0; }
-      .invoice-box { background: #fff; max-width: 820px; margin: 40px auto; padding: 36px 48px; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.08); }
-      header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 12px; }
-      .logo { width: 150px; height: auto; display:block; margin: 12px auto; object-fit: contain; }
-      .studio-name { font-size: 24px; font-weight: 700; margin: 4px 0; letter-spacing: 1px; }
-      .studio-info { color:#333; font-size:14px; margin-top: 6px; line-height:1.4 }
-      .details { display:flex; justify-content: space-between; margin-top: 22px; }
-      .details div { width:48%; font-size:14px; }
-      table { width:100%; border-collapse: collapse; margin-top:18px; font-size:14px; }
-      th, td { padding: 10px; border-bottom: 1px solid #e6e6e6; text-align:left; }
-      th { background:#111; color:#fff; text-transform: uppercase; font-size:13px; }
-      .total { text-align:right; font-size:18px; font-weight:700; margin-top:14px; }
-      .payments { margin-top:20px; }
-      .payment-item { padding:8px 10px; border-radius:8px; background:#fbfbfb; margin-bottom:8px; border:1px solid #eee; }
-      footer { text-align:center; border-top:1px solid #eee; padding-top:12px; color:#555; margin-top:20px; font-size:13px; }
-      .print-btn { display:block; margin:20px auto 0; background:#000; color:#fff; padding:10px 18px; border:none; border-radius:8px; cursor:pointer; }
-    </style>
-  </head>
-  <body>
-    <div class="invoice-box">
-      <header>
-        <header>
-  <img src="/assets/N__1_-removebg-preview.png" class="logo" alt="Black Feather Studio" />
-
-  <div class="studio-name">BLACK FEATHER STUDIO</div>
-  <div class="studio-info">
-    123 Main Road, Mayiladuturai – 609001<br>
-    📞 +91 98765 43210 | ✉️ blackfeatherstudio@gmail.com<br>
-    GSTIN: 33ABCDE1234F1Z5
-  </div>
-</header>
-      <div class="details">
-        <div>
-          <p><strong>Customer:</strong> ${c.name || ""}</p>
-          <p><strong>Email:</strong> ${c.email || ""}</p>
-          <p><strong>Phone:</strong> ${c.phone || ""}</p>
-        </div>
-        <div>
-          <p><strong>Event:</strong> ${c.event || ""}</p>
-          <p><strong>Date:</strong> ${c.date || ""}</p>
-          <p><strong>Place:</strong> ${c.place || ""}</p>
-        </div>
-      </div>
-
-      <table>
-        <thead>
-          <tr><th>Item</th><th>Details</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Camera</td><td>${c.products?.camera || 0}</td></tr>
-          <tr><td>Drone</td><td>${c.products?.drone || 0}</td></tr>
-          <tr><td>Light Setup</td><td>${c.products?.light || 0}</td></tr>
-        </tbody>
-      </table>
-
-      <div class="total">Total Amount: ₹${c.price || 0}</div>
-
-      <div class="payments">
-        <h4>Payments</h4>
-        ${relatedPayments.length === 0 ? `<p>No payments recorded yet.</p>` : relatedPayments.map(p => `
-          <div class="payment-item">
-            <div><strong>Amount:</strong> ₹${p.amount}</div>
-            <div><strong>Method:</strong> ${p.method}</div>
-            <div><strong>Txn ID:</strong> ${p.txnId || "-"}</div>
-            <div><strong>Date:</strong> ${p.paidAt}</div>
-          </div>`).join("")}
-        <p style="margin-top:8px;"><strong>Paid total:</strong> ₹${paidTotal}</p>
-        <p><strong>Balance:</strong> ₹${balance < 0 ? 0 : balance}</p>
-      </div>
-
-      <footer>
-        <p>Thank you for choosing Black Feather Studio 🖤</p>
-        <p>blackfeatherstudio@gmail.com | +91 98765 43210</p>
-        <p><small>GSTIN: 33ABCDE1234F1Z5 | Computer-generated invoice</small></p>
-      </footer>
-
-      <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
-    </div>
-  </body>
-  </html>
-  `;
-
-  res.send(html);
-});
-
-// simple notif route
-app.get("/notifications", (req, res) => {
-  res.json({ newMessage: newMessageFlag });
-  newMessageFlag = false;
-});
+// ------------------- ROOT -------------------
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
+
+// ------------------- SERVER -------------------
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`🚀 Server running on http://localhost:${PORT}`)
+);
