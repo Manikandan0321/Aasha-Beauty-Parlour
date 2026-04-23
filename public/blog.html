@@ -56,7 +56,7 @@
 
         <!-- Tip 1 -->
         <div class="blog__card">
-          <img src="assets/blog-1.jpg" alt="beauty tip" />
+          <img src="assets/skin.jpeg" alt="beauty tip" />
           <div class="blog__content">
             <h4>Daily Skincare Routine for Glowing Skin</h4>
             <p>
@@ -69,7 +69,7 @@
 
         <!-- Tip 2 -->
         <div class="blog__card">
-          <img src="assets/blog-2.jpg" alt="beauty tip" />
+          <img src="assets/haircares.jpeg" alt="beauty tip" />
           <div class="blog__content">
             <h4>Hair Care Tips for Strong & Shiny Hair</h4>
             <p>
@@ -82,7 +82,7 @@
 
         <!-- Tip 3 -->
         <div class="blog__card">
-          <img src="assets/blog-3.jpg" alt="beauty tip" />
+          <img src="assets/bridalpre.jpeg" alt="beauty tip" />
           <div class="blog__content">
             <h4>Bridal Makeup Preparation Guide</h4>
             <p>
@@ -95,7 +95,7 @@
 
         <!-- Tip 4 -->
         <div class="blog__card">
-          <img src="assets/blog-4.jpg" alt="beauty tip" />
+          <img src="assets/mengroomingh.jpeg" alt="beauty tip" />
           <div class="blog__content">
             <h4>Men’s Grooming Essentials</h4>
             <p>
@@ -120,6 +120,17 @@
         Book Appointment
       </button>
     </section>
+    <!-- AI Chat Section -->
+<section class="section__container">
+  <h2 class="section__header">Ask Beauty Expert 💬</h2>
+
+  <div id="chatBox" style="height:300px; overflow-y:auto; border:1px solid #ddd; padding:10px; border-radius:10px;"></div>
+
+  <div style="display:flex; margin-top:10px;">
+    <input type="text" id="userInput" placeholder="Ask your beauty question..." style="flex:1; padding:10px;">
+    <button onclick="sendMessage()" class="btn">Send</button>
+  </div>
+</section>
 
     <!-- Footer -->
      <footer>
@@ -173,5 +184,46 @@
         duration: 800,
       });
     </script>
+    <script>
+async function sendMessage() {
+  const input = document.getElementById("userInput");
+  const message = input.value;
+  const chatBox = document.getElementById("chatBox");
+
+  if (!message) return;
+
+  // user message
+  const userDiv = document.createElement("div");
+  userDiv.innerText = "You: " + message;
+  chatBox.appendChild(userDiv);
+
+  input.value = "";
+
+  // AI typing
+  const aiDiv = document.createElement("div");
+  aiDiv.innerText = "AI: typing...";
+  chatBox.appendChild(aiDiv);
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  try {
+    const res = await fetch("http://localhost:3000/ask-ai", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message })
+    });
+
+    const data = await res.json();
+    aiDiv.innerText = "AI: " + data.reply;
+
+  } catch (err) {
+    aiDiv.innerText = "AI: error 😢";
+  }
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+</script>
   </body>
 </html>

@@ -93,6 +93,54 @@
       z-index: 1000;
       text-decoration: none;
     }
+    /* Popup Background */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+/* Popup Box */
+.popup-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  width: 300px;
+  animation: fadeIn 0.3s ease;
+}
+
+.popup-content h3 {
+  margin-bottom: 10px;
+  color: #111;
+}
+
+.popup-content button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #d63384;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.popup-content button:hover {
+  background: #b82c6f;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
   </style>
 </head>
 
@@ -180,6 +228,14 @@
   </div>
 
 </section>
+<!-- ✅ Success Popup -->
+<div id="successPopup" class="popup">
+  <div class="popup-content">
+    <h3>✅ Booking Successful!</h3>
+    <p>We will contact you soon.</p>
+    <button onclick="closePopup()">OK</button>
+  </div>
+</div>
 
 <footer>
   &copy; 2025 Aasha Men & Women Beauty Parlour. All Rights Reserved.
@@ -214,33 +270,49 @@
   }
   updateStatus();
 
-  // WhatsApp Booking
-  document.getElementById("contactForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+  document.getElementById("contactForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    const name = document.getElementById("name").value;
-    const phone = document.getElementById("phone").value;
-    const service = document.getElementById("service").value;
-    const date = document.getElementById("date").value;
-    const time = document.getElementById("time").value;
+  const data = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    phone: document.getElementById("phone").value,
+    event: document.getElementById("service").value,
+    date: document.getElementById("date").value,
+    time: document.getElementById("time").value,
+    place: "Salon Visit",
+    message: document.getElementById("message").value,
+    products: { camera: 0, drone: 0, light: 0 }
+  };
 
-    const message = `New Appointment Booking:
-Name: ${name}
-Phone: ${phone}
-Service: ${service}
-Date: ${date}
-Time: ${time}`;
+  try {
+    const res = await fetch("/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
 
-    const whatsappNumber = "919080734683"; // Replace with your number
-    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    const result = await res.json();
 
-    window.open(url, "_blank");
-
-    document.getElementById("responseMsg").textContent =
-      "Redirecting to WhatsApp for confirmation...";
+    openPopup();
 
     document.getElementById("contactForm").reset();
-  });
+
+  } catch (err) {
+    document.getElementById("responseMsg").textContent =
+      "❌ Something went wrong. Try again.";
+  }
+});
+
+function openPopup() {
+  document.getElementById("successPopup").style.display = "flex";
+}
+
+function closePopup() {
+  document.getElementById("successPopup").style.display = "none";
+}
 </script>
 
 </body>
