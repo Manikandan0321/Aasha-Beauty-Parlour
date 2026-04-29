@@ -3,179 +3,217 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Contact | Aasha Men & Women Beauty Parlour</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet"/>
+  <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css"
+    rel="stylesheet"
+  />
+
   <link rel="stylesheet" href="styles.css" />
 
   <style>
-    .section__container {
-      max-width: 800px;
-      margin: 120px auto 60px auto;
-      background: #fff;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+
+    body{
+      margin:0;
+      padding:0;
     }
 
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: 500;
-      color: #111;
+    label{
+      display:block;
+      margin-top:15px;
+      font-weight:500;
+      color:#111;
     }
 
-    input, textarea, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-      outline: none;
+    input,
+    textarea,
+    select{
+      width:100%;
+      padding:10px;
+      margin-top:6px;
+      border:1px solid #ccc;
+      border-radius:6px;
+      font-size:1rem;
+      outline:none;
+      box-sizing:border-box;
     }
 
-    textarea { resize: none; }
-
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      background: #111;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.3s;
+    textarea{
+      resize:none;
     }
 
-    button:hover { background: #333; }
-
-    .map__section {
-      margin-top: 50px;
-      text-align: center;
+    button{
+      margin-top:20px;
+      width:100%;
+      padding:12px;
+      background:#111;
+      color:#fff;
+      border:none;
+      border-radius:6px;
+      font-size:1rem;
+      cursor:pointer;
+      transition:0.3s;
     }
 
-    .map__section iframe {
-      width: 100%;
-      height: 350px;
-      border: 0;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    button:hover{
+      background:#333;
     }
 
-    .status {
-      font-weight: bold;
-      margin-bottom: 15px;
-      font-size: 1.1rem;
+    .status{
+      font-weight:bold;
+      margin-bottom:15px;
+      font-size:1.1rem;
     }
 
-    footer {
-      background: #111;
-      color: white;
-      text-align: center;
-      padding: 15px;
-      margin-top: 50px;
+    .map__section{
+      margin-top:50px;
+      text-align:center;
     }
 
-    /* Floating WhatsApp */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #25D366;
-      color: white;
-      font-size: 28px;
-      padding: 12px 15px;
-      border-radius: 50%;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      z-index: 1000;
-      text-decoration: none;
+    .map__section iframe{
+      width:100%;
+      height:350px;
+      border:0;
+      border-radius:12px;
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
     }
-    /* Popup Background */
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
 
-/* Popup Box */
-.popup-content {
-  background: #fff;
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-  width: 300px;
-  animation: fadeIn 0.3s ease;
-}
+    /* POPUP */
+    .popup{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.6);
+      display:none;
+      justify-content:center;
+      align-items:center;
+      z-index:2000;
+    }
 
-.popup-content h3 {
-  margin-bottom: 10px;
-  color: #111;
-}
+    .popup-content{
+      background:#fff;
+      padding:30px;
+      border-radius:12px;
+      text-align:center;
+      width:300px;
+      animation:fadeIn 0.3s ease;
+    }
 
-.popup-content button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: #d63384;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
+    .popup-content h3{
+      margin-bottom:10px;
+      color:#111;
+    }
 
-.popup-content button:hover {
-  background: #b82c6f;
-}
+    .popup-content button{
+      margin-top:15px;
+      padding:10px 20px;
+      background:#d63384;
+      color:white;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+    }
 
-/* Animation */
-@keyframes fadeIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
+    .popup-content button:hover{
+      background:#b82c6f;
+    }
+
+    @keyframes fadeIn{
+      from{
+        transform:scale(0.8);
+        opacity:0;
+      }
+      to{
+        transform:scale(1);
+        opacity:1;
+      }
+    }
+
+    /* WHATSAPP */
+    .whatsapp-float{
+      position:fixed;
+      bottom:20px;
+      right:20px;
+      background:#25D366;
+      color:white;
+      font-size:28px;
+      padding:12px 15px;
+      border-radius:50%;
+      box-shadow:0 4px 10px rgba(0,0,0,0.3);
+      z-index:1000;
+      text-decoration:none;
+    }
+
+    /* CALL */
+    .call-float{
+      position:fixed;
+      bottom:90px;
+      right:20px;
+      background:#007bff;
+      color:white;
+      font-size:26px;
+      padding:12px 15px;
+      border-radius:50%;
+      box-shadow:0 4px 10px rgba(0,0,0,0.3);
+      z-index:1000;
+      text-decoration:none;
+    }
+
+    .call-float:hover{
+      background:#0056b3;
+    }
+
   </style>
 </head>
 
 <body>
 
-<!-- Navbar -->
- <header class="header-6" id="home">
-      <nav>
-        <div class="nav__header">
-          <div class="nav__logo">
-            <a href="#">
-              <img src="assets/logo-1.png" alt="logo" />
-            </a>
-          </div>
-          <div class="nav__menu__btn" id="menu-btn">
-            <i class="ri-menu-line"></i>
-          </div>
-        </div>
-        <ul class="nav__links" id="nav-links">
-          <li><a href="index.html">HOME</a></li>
-          <li><a href="about.html">ABOUT US</a></li>
-          <li><a href="service.html">SERVICES</a></li>
-          <li class="nav__logo">
-            <a href="#">
-              <img src="assets/logo-1.png" alt="logo" />
-            </a>
-          </li>
-          <li><a href="client.html">REVIEWS</a></li>
-          <li><a href="blog.html">BEAUTY TIPS</a></li>
-          <li><a href="contact.html">CONTACT US</a></li>
-        </ul>
-      </nav>
-    </header>
+<!-- NAVBAR -->
+<header class="header-6" id="home">
 
-<!-- Contact Section -->
+  <nav>
+
+    <div class="nav__header">
+
+      <div class="nav__logo">
+        <a href="#">
+          <img src="assets/logo-1.png" alt="logo" />
+        </a>
+      </div>
+
+      <div class="nav__menu__btn" id="menu-btn">
+        <i class="ri-menu-line"></i>
+      </div>
+
+    </div>
+
+    <ul class="nav__links" id="nav-links">
+
+      <li><a href="index.html">HOME</a></li>
+      <li><a href="about.html">ABOUT US</a></li>
+      <li><a href="service.html">SERVICES</a></li>
+
+      <li class="nav__logo">
+        <a href="#">
+          <img src="assets/logo-1.png" alt="logo" />
+        </a>
+      </li>
+
+      <li><a href="client.html">REVIEWS</a></li>
+      <li><a href="blog.html">BEAUTY TIPS</a></li>
+      <li><a href="contact.html">CONTACT US</a></li>
+
+    </ul>
+
+  </nav>
+
+</header>
+
+<!-- CONTACT -->
 <section class="section__container">
 
   <p id="status" class="status"></p>
@@ -183,6 +221,7 @@
   <h2>Salon Appointment Form</h2>
 
   <form id="contactForm">
+
     <label>Full Name</label>
     <input type="text" id="name" required />
 
@@ -193,14 +232,15 @@
     <input type="text" id="phone" required />
 
     <label>Select Service</label>
+
     <select id="service" required>
       <option value="">-- Choose Service --</option>
-      <option>Haircut</option>
-      <option>Hair Coloring</option>
-      <option>Facial</option>
-      <option>Bridal Makeup</option>
-      <option>Beard Grooming</option>
-      <option>Skin Treatment</option>
+      <option value="Haircut">Haircut</option>
+      <option value="Hair Coloring">Hair Coloring</option>
+      <option value="Facial">Facial</option>
+      <option value="Bridal Makeup">Bridal Makeup</option>
+      <option value="Beard Grooming">Beard Grooming</option>
+      <option value="Skin Treatment">Skin Treatment</option>
     </select>
 
     <label>Preferred Date</label>
@@ -213,108 +253,280 @@
     <textarea id="message" rows="4"></textarea>
 
     <button type="submit">Book Appointment</button>
+
   </form>
 
-  <p id="responseMsg" style="margin-top:20px;color:green;font-weight:bold;"></p>
+  <p
+    id="responseMsg"
+    style="margin-top:20px;color:green;font-weight:bold;"
+  ></p>
 
-  <!-- Map Section -->
+  <!-- MAP -->
   <div class="map__section">
+
     <h3>📍 Our Location</h3>
+
     <iframe
       loading="lazy"
       allowfullscreen
       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3897.4669569815697!2d78.0917614!3d9.5098752!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0130190ae57f31%3A0x5361fde543122a33!2sAasha%20Beauty%20Parlour%20men%20and%20women!5e0!3m2!1sen!2sin!4v1708123456789!5m2!1sen!2sin">
     </iframe>
+
   </div>
 
 </section>
-<!-- ✅ Success Popup -->
+
+<!-- SUCCESS POPUP -->
 <div id="successPopup" class="popup">
+
   <div class="popup-content">
+
     <h3>✅ Booking Successful!</h3>
+
     <p>We will contact you soon.</p>
+
     <button onclick="closePopup()">OK</button>
+
   </div>
+
 </div>
 
+<!-- FOOTER -->
 <footer>
-  &copy; 2025 Aasha Men & Women Beauty Parlour. All Rights Reserved.
+
+  <div class="section__container footer__container">
+
+    <!-- LOGO -->
+    <div class="footer__col">
+
+      <img src="assets/logo-2.png" alt="logo" />
+
+      <div class="footer__socials">
+
+        <a href="#"><i class="ri-facebook-fill"></i></a>
+        <a href="#"><i class="ri-instagram-line"></i></a>
+        <a href="#"><i class="ri-twitter-fill"></i></a>
+        <a href="#"><i class="ri-youtube-fill"></i></a>
+        <a href="#"><i class="ri-pinterest-line"></i></a>
+
+      </div>
+
+    </div>
+
+    <!-- LINKS -->
+    <div class="footer__col">
+
+      <ul class="footer__links">
+
+        <li><a href="index.html#home">HOME</a></li>
+        <li><a href="about.html">ABOUT US</a></li>
+        <li><a href="service.html">SERVICES</a></li>
+        <li><a href="client.html">CLIENT</a></li>
+        <li><a href="blog.html">BLOG</a></li>
+        <li><a href="contact.html">CONTACT US</a></li>
+
+      </ul>
+
+    </div>
+
+    <!-- LOCATION -->
+    <div class="footer__col">
+
+      <h4>OUR LOCATION</h4>
+
+      <p>
+        📍 Aasha Beauty Parlour <br>
+        Madurai, Tamil Nadu <br>
+        📞 +91 90807 34683 <br>
+        ✉️ your-email@gmail.com
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="footer__bar">
+    Copyright © 2025 Aasha Beauty Parlour.
+    All Rights Reserved.
+  </div>
+
 </footer>
 
-<!-- Floating WhatsApp Button -->
-<a href="https://wa.me/919080734683" target="_blank" class="whatsapp-float">
+<!-- WHATSAPP -->
+<a
+  href="https://wa.me/919080734683"
+  target="_blank"
+  class="whatsapp-float"
+>
   <i class="ri-whatsapp-line"></i>
 </a>
 
+<!-- CALL -->
+<a href="tel:+919080734683" class="call-float">
+  <i class="ri-phone-fill"></i>
+</a>
+
+<!-- SCRIPT -->
 <script>
-  // Navbar toggle
+
+  // NAVBAR TOGGLE
   const menuBtn = document.getElementById("menu-btn");
   const navLinks = document.getElementById("nav-links");
+
   menuBtn.addEventListener("click", () => {
     navLinks.classList.toggle("open");
   });
 
-  // Open / Close Status
-  function updateStatus() {
+  // SHOP STATUS
+  function updateStatus(){
+
     const now = new Date();
     const hour = now.getHours();
-    const statusElement = document.getElementById("status");
 
-    if (hour >= 9 && hour < 20) {
-      statusElement.textContent = "🟢 We are Open Now (9AM - 8PM)";
+    const statusElement =
+      document.getElementById("status");
+
+    if(hour >= 9 && hour < 20){
+
+      statusElement.textContent =
+        "🟢 We are Open Now (9AM - 8PM)";
+
       statusElement.style.color = "green";
+
     } else {
-      statusElement.textContent = "🔴 We are Closed Now (Opens at 9AM)";
+
+      statusElement.textContent =
+        "🔴 We are Closed Now (Opens at 9AM)";
+
       statusElement.style.color = "red";
     }
   }
+
   updateStatus();
 
-  document.getElementById("contactForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+  // FORM SUBMIT
+  document
+    .getElementById("contactForm")
+    .addEventListener("submit", async (e) => {
 
-  const data = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    phone: document.getElementById("phone").value,
-    event: document.getElementById("service").value,
-    date: document.getElementById("date").value,
-    time: document.getElementById("time").value,
-    place: "Salon Visit",
-    message: document.getElementById("message").value,
-    products: { camera: 0, drone: 0, light: 0 }
-  };
+    e.preventDefault();
 
-  try {
-    const res = await fetch("/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    });
+    const serviceValue =
+      document.getElementById("service").value;
 
-    const result = await res.json();
+    // VALIDATION
+    if(!serviceValue){
+      alert("Please select service");
+      return;
+    }
 
-    openPopup();
+    // DATA
+    const data = {
 
-    document.getElementById("contactForm").reset();
+      name:
+        document.getElementById("name")
+        .value.trim(),
 
-  } catch (err) {
-    document.getElementById("responseMsg").textContent =
-      "❌ Something went wrong. Try again.";
+      email:
+        document.getElementById("email")
+        .value.trim(),
+
+      phone:
+        document.getElementById("phone")
+        .value.trim(),
+
+      event:
+        serviceValue.trim(),
+
+      date:
+        document.getElementById("date")
+        .value,
+
+      time:
+        document.getElementById("time")
+        .value,
+
+      place:"Salon Visit",
+
+      message:
+        document.getElementById("message")
+        .value.trim()
+    };
+
+    try{
+
+      // SEND TO BACKEND
+      const res = await fetch("/submit",{
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify(data)
+
+      });
+
+      if(!res.ok){
+        throw new Error("Server Error");
+      }
+
+      // POPUP
+      openPopup();
+
+      // WHATSAPP MESSAGE
+      const whatsappMessage = `
+New Booking
+
+Name: ${data.name}
+Phone: ${data.phone}
+Service: ${data.event}
+Date: ${data.date}
+Time: ${data.time}
+Message: ${data.message || "No message"}
+`;
+
+      const phone = "919080734683";
+
+      const whatsappURL =
+        `https://wa.me/${phone}?text=${encodeURIComponent(whatsappMessage)}`;
+
+      // OPEN WHATSAPP
+      window.open(whatsappURL, "_blank");
+
+      // RESET
+      document.getElementById("contactForm").reset();
+
+      // RESPONSE MESSAGE
+      document.getElementById("responseMsg").textContent =
+        "✅ Booking submitted successfully";
+
+    }
+    catch(err){
+
+      console.error("Submit Error:", err);
+
+      document.getElementById("responseMsg").textContent =
+        "❌ Something went wrong. Try again.";
+
+    }
+
+  });
+
+  // OPEN POPUP
+  function openPopup(){
+    document.getElementById("successPopup").style.display =
+      "flex";
   }
-});
 
-function openPopup() {
-  document.getElementById("successPopup").style.display = "flex";
-}
+  // CLOSE POPUP
+  function closePopup(){
+    document.getElementById("successPopup").style.display =
+      "none";
+  }
 
-function closePopup() {
-  document.getElementById("successPopup").style.display = "none";
-}
 </script>
 
 </body>
-
 </html>

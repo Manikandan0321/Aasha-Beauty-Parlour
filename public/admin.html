@@ -1,531 +1,346 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aasha Beauty</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aasha Admin</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+body { font-family: Arial; background:#f5f5f5; margin:0; }
 
-    .top-bar {
-      background: #000;
-      color: white;
-      text-align: center;
-      padding: 15px;
-      
-    }
-    .top-bar img {
-  height: 120px;     
-  width: auto;
-  object-fit: contain;
-  margin-top: 5px;
+/* HEADER */
+.top-bar {
+  background:black;
+  color:white;
+  text-align:center;
+  padding:15px;
 }
 
+/* STATS */
+.stats {
+  display:grid;
+  grid-template-columns: repeat(4,1fr);
+  gap:10px;
+  padding:15px;
+}
+.card {
+  background:white;
+  padding:10px;
+  border-radius:8px;
+  text-align:center;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
 
-    .tabs {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      padding: 10px;
-      background: #fff;
-      border-bottom: 1px solid #ccc;
-      position: sticky;
-      top: 0;
-      z-index: 5;
-    }
-    .tab-btn {
-      padding: 8px 15px;
-      background: #e4e4e4;
-      border-radius: 5px;
-      cursor: pointer;
-      border: 1px solid #ccc;
-      font-weight: bold;
-    }
-    .tab-btn.active {
-      background: black;
-      color: white;
-    }
+/* TABS */
+.tabs {
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  background:white;
+  padding:10px;
+}
+.tab-btn {
+  padding:6px 12px;
+  background:#ddd;
+  border-radius:5px;
+  cursor:pointer;
+}
+.tab-btn.active {
+  background:black;
+  color:white;
+}
 
-    .tab-panel {
-      display: none;
-      padding: 20px;
-    }
-    .tab-panel.active {
-      display: block;
-    }
+/* TABLE */
+table { width:100%; background:white; border-collapse:collapse; }
+th, td { padding:8px; text-align:center; }
+th { background:#111; color:white; }
 
-    /* SEARCH BOX */
-    .search-box {
-      text-align: right;
-      margin-bottom: 10px;
-    }
-    .search-box input {
-      width: 250px;
-      padding: 6px;
-      border: 1px solid #aaa;
-      border-radius: 5px;
-    }
+/* BUTTONS */
+button {
+  padding:4px 8px;
+  border:none;
+  border-radius:5px;
+  color:white;
+  cursor:pointer;
+}
+.view { background:green; }
+.edit { background:orange; }
+.confirm { background:blue; }
+.delete { background:red; }
+.pay { background:purple; }
+.bill { background:#444; }
 
-    /* TABLE */
-    table {
-      width: 100%;
-      background: white;
-      border-collapse: collapse;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    th {
-      background: #111;
-      color: white;
-      padding: 10px;
-      text-transform: uppercase;
-      font-size: 13px;
-    }
-    td {
-      padding: 10px;
-      border-bottom: 1px solid #e1e1e1;
-      text-align: center;
-    }
-
-    button {
-      padding: 5px 10px;
-      border-radius: 5px;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 13px;
-      margin: 2px;
-    }
-
-    .view-btn { background: #28a745; }
-    .edit-btn { background: #f39c12; }
-    .delete-btn { background: #e74c3c; }
-    .confirm-btn { background: #007bff; }
-    .bill-btn { background: #6f42c1; }
-    .pay-btn { background: #8b32d4; }
-    .restore-btn { background: #17a2b8; }
-
-    /* MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-    .modal-content {
-      background: white;
-      width: 380px;
-      padding: 20px;
-      border-radius: 8px;
-      position: relative;
-    }
-    .close-btn {
-      position: absolute;
-      top: 10px; right: 10px;
-      background: red;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      font-size: 18px;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-    .modal-content input, select {
-      width: 100%;
-      padding: 7px;
-      margin-top: 6px;
-      border-radius: 5px;
-      border: 1px solid #aaa;
-    }
-  </style>
+/* MODAL */
+.modal {
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+}
+.modal-box {
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  width:300px;
+}
+.modal-box input, textarea {
+  width:100%;
+  margin:5px 0;
+  padding:6px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="top-bar">
-  <a href="#">
-              <img src="assets/icon-192.png" alt="logo" />
-            </a>
-  </div>
+  <h2>Aasha Admin Dashboard</h2>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="card"><h3 id="total">0</h3>Total</div>
+  <div class="card"><h3 id="pendingCount">0</h3>Pending</div>
+  <div class="card"><h3 id="confirmedCount">0</h3>Confirmed</div>
+  <div class="card"><h3 id="revenue">₹0</h3>Revenue</div>
+</div>
 
 <!-- TABS -->
 <div class="tabs">
-  <div class="tab-btn active" data-tab="pending">Pending</div>
-  <div class="tab-btn" data-tab="confirmed">Confirmed</div>
-  <div class="tab-btn" data-tab="payments">Payments</div>
-  <div class="tab-btn" data-tab="deleted">Deleted</div>
+  <div class="tab-btn active" onclick="switchTab('pending',event)">Pending</div>
+  <div class="tab-btn" onclick="switchTab('confirmed',event)">Confirmed</div>
+  <div class="tab-btn" onclick="switchTab('payments',event)">Payments</div>
 </div>
 
-<!-- PANELS -->
-<div id="pending" class="tab-panel active">
-  <div class="search-box">
-    <input id="searchPending" placeholder="Search pending..." onkeyup="renderPending()" />
-  </div>
-  <div id="pendingTableWrap"></div>
+<!-- PENDING -->
+<div id="pending">
+  <div id="pendingTable"></div>
 </div>
 
-<div id="confirmed" class="tab-panel">
-  <div class="search-box">
-    <input id="searchConfirmed" placeholder="Search confirmed..." onkeyup="renderConfirmed()" />
-  </div>
-  <div id="confirmedTableWrap"></div>
+<!-- CONFIRMED -->
+<div id="confirmed" style="display:none;">
+  <div id="confirmedTable"></div>
 </div>
 
-<div id="payments" class="tab-panel">
-  <div class="search-box">
-    <input id="searchPayments" placeholder="Search payments..." onkeyup="renderPayments()" />
-  </div>
-  <div id="paymentsWrap"></div>
+<!-- PAYMENTS -->
+<div id="payments" style="display:none;">
+  <div id="paymentTable"></div>
 </div>
 
-<div id="deleted" class="tab-panel">
-  <div class="search-box">
-    <input id="searchDeleted" placeholder="Search deleted..." onkeyup="renderDeleted()" />
-  </div>
-  <div id="deletedWrap"></div>
-</div>
+<!-- MODAL -->
+<div id="modal" class="modal">
+  <div class="modal-box">
+    <h3>Edit Details</h3>
 
-<!-- DETAILS MODAL -->
-<div id="detailsModal" class="modal">
-  <div class="modal-content">
-    <button class="close-btn" onclick="closeModal()">×</button>
-    <h3>Details</h3>
-    <div id="modalContent"></div>
-  </div>
-</div>
+    <input id="name">
+    <input id="email">
+    <input id="phone">
+    <input id="service">
+    <input id="date" type="date">
+    <input id="time" type="time">
+    <textarea id="message"></textarea>
 
-<!-- PAYMENT MODAL -->
-<div id="paymentModal" class="modal">
-  <div class="modal-content">
-    <button class="close-btn" onclick="closePaymentModal()">×</button>
-    <h3>Record Payment</h3>
-    <div id="paymentContent"></div>
+    <button onclick="saveEdit()" class="confirm">Save</button>
+    <button onclick="closeModal()" class="delete">Close</button>
   </div>
 </div>
 
 <script>
-/* ---------------- TAB SWITCHING ---------------- */
-document.querySelectorAll(".tab-btn").forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
 
-    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
-    document.getElementById(btn.dataset.tab).classList.add("active");
+let allData=[];
+let payments=[];
+let currentIndex=null;
 
-    if (btn.dataset.tab === "payments") loadPayments();
-    if (btn.dataset.tab === "deleted") loadDeleted();
-  };
-});
+/* TAB */
+function switchTab(tab,e){
+  document.getElementById("pending").style.display="none";
+  document.getElementById("confirmed").style.display="none";
+  document.getElementById("payments").style.display="none";
 
-/* ---------------- LOAD DATA ---------------- */
-let allData = [];
-let paymentData = [];
-let deletedData = [];
+  document.getElementById(tab).style.display="block";
 
-async function loadData() {
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  e.target.classList.add("active");
+
+  if(tab==="payments") loadPayments();
+}
+
+/* LOAD */
+async function loadData(){
   const res = await fetch("/data");
   allData = await res.json();
+
+  updateStats();
   renderPending();
   renderConfirmed();
 }
 
-/* ---------------- PENDING ---------------- */
-function renderPending() {
-  const t = document.getElementById("searchPending").value.toLowerCase();
-  const list = allData.filter(d => !d.confirmed && d.name.toLowerCase().includes(t));
+/* STATS */
+function updateStats(){
+  document.getElementById("total").innerText=allData.length;
 
-  let html = `<table><tr>
-    <th>#</th><th>Name</th><th>Event</th><th>Date</th><th>Actions</th>
-   </tr>`;
+  const pending=allData.filter(d=>!d.confirmed);
+  const confirmed=allData.filter(d=>d.confirmed);
 
-  list.forEach((item, index) => {
-    const i = allData.indexOf(item);
-    html += `
+  document.getElementById("pendingCount").innerText=pending.length;
+  document.getElementById("confirmedCount").innerText=confirmed.length;
+
+  const revenue=confirmed.reduce((s,c)=>s+(c.price||0),0);
+  document.getElementById("revenue").innerText="₹"+revenue;
+}
+
+/* PENDING */
+function renderPending(){
+  let html=`<table>
+  <tr><th>Name</th><th>Service</th><th>Date</th><th>Actions</th></tr>`;
+
+  allData.filter(d=>!d.confirmed).forEach((d,i)=>{
+    const index=allData.indexOf(d);
+
+    html+=`
     <tr>
-      <td>${i+1}</td>
-      <td>${item.name}</td>
-      <td>${item.event}</td>
-      <td>${item.date}</td>
+      <td>${d.name}</td>
+      <td>${d.event}</td>
+      <td>${d.date}</td>
       <td>
-        <button class="view-btn" onclick="viewDetails(${i})">View</button>
-        <button class="edit-btn" onclick="editCustomer(${i})">Edit</button>
-        <button class="confirm-btn" onclick="confirmPrice(${i})">Confirm</button>
-        <button class="delete-btn" onclick="deleteCustomer(${i})">Delete</button>
+        <button class="view" onclick="view(${index})">View</button>
+        <button class="confirm" onclick="confirmBooking(${index})">Confirm</button>
+        <button class="delete" onclick="deleteBooking(${index})">Delete</button>
       </td>
     </tr>`;
   });
 
-  html += `</table>`;
-  document.getElementById("pendingTableWrap").innerHTML = html;
+  html+="</table>";
+  document.getElementById("pendingTable").innerHTML=html;
 }
 
-/* ---------------- CONFIRMED ---------------- */
-function renderConfirmed() {
-  const t = document.getElementById("searchConfirmed").value.toLowerCase();
-  const list = allData.filter(d => d.confirmed && d.name.toLowerCase().includes(t));
+/* CONFIRMED */
+function renderConfirmed(){
+  let html=`<table>
+  <tr><th>Name</th><th>Service</th><th>Price</th><th>Actions</th></tr>`;
 
-  let html = `<table><tr>
-    <th>#</th><th>Name</th><th>Event</th><th>Price</th><th>Actions</th>
-   </tr>`;
+  allData.filter(d=>d.confirmed).forEach(d=>{
+    const index=allData.indexOf(d);
 
-  list.forEach((item, idx) => {
-    const i = allData.indexOf(item);
-    html += `
+    html+=`
     <tr>
-      <td>${i+1}</td>
-      <td>${item.name}</td>
-      <td>${item.event}</td>
-      <td>₹${item.price}</td>
+      <td>${d.name}</td>
+      <td>${d.event}</td>
+      <td>₹${d.price}</td>
       <td>
-        <button class="view-btn" onclick="viewDetails(${i})">View</button>
-        <button class="bill-btn" onclick="openBill(${i})">Bill</button>
-        <button class="pay-btn" onclick="openPayment(${i})">Pay</button>
-        <button class="delete-btn" onclick="deleteCustomer(${i})">Delete</button>
+        <button class="pay" onclick="pay(${index})">Pay</button>
+        <button class="bill" onclick="bill(${index})">Bill</button>
       </td>
     </tr>`;
   });
 
-  html += `</table>`;
-  document.getElementById("confirmedTableWrap").innerHTML = html;
+  html+="</table>";
+  document.getElementById("confirmedTable").innerHTML=html;
 }
 
-/* ---------------- PAYMENT ---------------- */
-async function loadPayments() {
-  const res = await fetch("/payments");
-  paymentData = await res.json();
-  renderPayments();
+/* VIEW + EDIT */
+function view(i){
+  const d=allData[i];
+  currentIndex=i;
+
+  name.value=d.name;
+  email.value=d.email;
+  phone.value=d.phone;
+  service.value=d.event;
+  date.value=d.date;
+  time.value=d.time;
+  message.value=d.message;
+
+  modal.style.display="flex";
 }
 
-function renderPayments() {
-  const t = document.getElementById("searchPayments").value.toLowerCase();
+function closeModal(){
+  modal.style.display="none";
+}
 
-  let html = `<table><tr>
-    <th>#</th><th>Name</th><th>Event</th><th>Amount</th><th>Method</th><th>Date</th>
-   </tr>`;
+async function saveEdit(){
+  const updated={
+    name:name.value,
+    email:email.value,
+    phone:phone.value,
+    event:service.value,
+    date:date.value,
+    time:time.value,
+    message:message.value
+  };
 
-  paymentData.filter(p => p.bookingName.toLowerCase().includes(t)).forEach((p, i) => {
-    html += `
+  await fetch(`/edit/${currentIndex}`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(updated)
+  });
+
+  alert("Updated ✅");
+  closeModal();
+  loadData();
+}
+
+/* ACTIONS */
+async function confirmBooking(i){
+  const price=prompt("Enter price");
+  if(!price) return;
+
+  await fetch(`/confirm/${i}`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({price})
+  });
+
+  loadData();
+}
+
+async function deleteBooking(i){
+  await fetch(`/delete/${i}`,{method:"DELETE"});
+  loadData();
+}
+
+function pay(i){
+  const amount=prompt("Enter amount");
+  fetch(`/payment/${i}`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({amount,method:"Cash"})
+  });
+  alert("Paid");
+}
+
+function bill(i){
+  window.open(`/bill/${i}`);
+}
+
+/* PAYMENTS */
+async function loadPayments(){
+  const res=await fetch("/payments");
+  payments=await res.json();
+
+  let html=`<table>
+  <tr><th>Name</th><th>Service</th><th>Amount</th></tr>`;
+
+  payments.forEach(p=>{
+    html+=`
     <tr>
-      <td>${i+1}</td>
       <td>${p.bookingName}</td>
       <td>${p.event}</td>
       <td>₹${p.amount}</td>
-      <td>${p.method}</td>
-      <td>${p.paidAt}</td>
     </tr>`;
   });
 
-  html += `</table>`;
-  document.getElementById("paymentsWrap").innerHTML = html;
-}
-
-/* ---------------- DELETED ---------------- */
-async function loadDeleted() {
-  const res = await fetch("/deleted");
-  deletedData = await res.json();
-  renderDeleted();
-}
-
-function renderDeleted() {
-  const t = document.getElementById("searchDeleted").value.toLowerCase();
-
-  let html = `<table><tr>
-    <th>#</th><th>Name</th><th>Event</th><th>Deleted</th><th>Actions</th>
-   </tr>`;
-
-  deletedData
-    .filter(d => d.name.toLowerCase().includes(t))
-    .forEach((d, i) => {
-      html += `
-      <tr>
-        <td>${i+1}</td>
-        <td>${d.name}</td>
-        <td>${d.event}</td>
-        <td>${d.deletedAt}</td>
-        <td>
-          <button class="restore-btn" onclick="restore(${i})">Restore</button>
-          <button class="delete-btn" onclick="permanentDelete(${i})">Delete</button>
-        </td>
-      </tr>`;
-    });
-
-  html += `</table>`;
-  document.getElementById("deletedWrap").innerHTML = html;
-}
-
-/* ---------------- MODALS ---------------- */
-function viewDetails(i) {
-  const c = allData[i];
-  document.getElementById("modalContent").innerHTML = `
-    <p><b>Name:</b> ${c.name}</p>
-    <p><b>Email:</b> ${c.email}</p>
-    <p><b>Phone:</b> ${c.phone}</p>
-    <p><b>Event:</b> ${c.event}</p>
-    <p><b>Date:</b> ${c.date} ${c.time}</p>
-    <p><b>Place:</b> ${c.place}</p>
-    <p><b>Message:</b> ${c.message}</p>
-  `;
-  document.getElementById("detailsModal").style.display = "flex";
-}
-function closeModal() {
-  document.getElementById("detailsModal").style.display = "none";
-}
-
-/* ---------------- PAYMENT MODAL ---------------- */
-function openPayment(i) {
-  const c = allData[i];
-  document.getElementById("paymentContent").innerHTML = `
-    <p><b>Name:</b> ${c.name}</p>
-    <p><b>Total Amount:</b> ₹${c.price}</p>
-
-    <label>Amount Paid</label>
-    <input id="payAmount" type="number" value="${c.price}" />
-
-    <label>Payment Method</label>
-    <select id="payMethod" onchange="switchPaymentUI()">
-      <option value="">Select</option>
-      <option value="UPI">UPI</option>
-      <option value="Cash">Cash</option>
-      <option value="Bank">Bank</option>
-    </select>
-
-    <div id="extraPaymentFields"></div>
-
-    <button class="confirm-btn" onclick="savePayment(${i})" style="margin-top:12px;width:100%;">Save Payment</button>
-  `;
-  document.getElementById("paymentModal").style.display = "flex";
-}
-
-function closePaymentModal() {
-  document.getElementById("paymentModal").style.display = "none";
-}
-
-/* ---------------- PAYMENT UI SWITCH ---------------- */
-function switchPaymentUI() {
-  const method = document.getElementById("payMethod").value;
-  const extra = document.getElementById("extraPaymentFields");
-
-  if (method === "UPI") {
-    extra.innerHTML = `
-      <label>Upload UPI Screenshot</label>
-      <input type="file" id="upiScreenshot" accept="image/*" />
-    `;
-  } 
-  else if (method === "Cash") {
-    extra.innerHTML = `
-      <label>Received By</label>
-      <input type="text" id="cashReceiver" placeholder="Name of receiver" />
-    `;
-  } 
-  else if (method === "Bank") {
-    extra.innerHTML = `
-      <label>Transaction ID</label>
-      <input type="text" id="bankTxnId" placeholder="Enter transaction ID" />
-    `;
-  } 
-  else {
-    extra.innerHTML = "";
-  }
-}
-
-/* ---------------- PAYMENT SAVE ---------------- */
-async function savePayment(i) {
-  const amount = document.getElementById("payAmount").value;
-  const method = document.getElementById("payMethod").value;
-
-  let extra = {};
-
-  if (method === "UPI") {
-    extra.screenshot = document.getElementById("upiScreenshot")?.value || "";
-  }
-
-  if (method === "Cash") {
-    extra.receivedBy = document.getElementById("cashReceiver")?.value || "";
-  }
-
-  if (method === "Bank") {
-    extra.bankTxnId = document.getElementById("bankTxnId")?.value || "";
-  }
-
-  await fetch(`/payment/${i}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount, method, ...extra })
-  });
-
-  alert("Payment Saved");
-  closePaymentModal();
-  loadPayments();
-}
-
-/* ---------------- DELETE / RESTORE ---------------- */
-async function deleteCustomer(i) {
-  if (!confirm("Move customer to deleted list?")) return;
-  await fetch(`/delete/${i}`, { method: "DELETE" });
-  loadData();
-}
-
-async function restore(i) {
-  await fetch(`/restore/${i}`, { method: "POST" });
-  loadDeleted();
-  loadData();
-}
-
-async function permanentDelete(i) {
-  if (!confirm("Permanently delete?")) return;
-  await fetch(`/delete-permanent/${i}`, { method: "DELETE" });
-  loadDeleted();
-}
-
-/* ---------------- OTHER ---------------- */
-async function editCustomer(i) {
-  const c = allData[i];
-  const newDate = prompt("New date", c.date);
-  const newTime = prompt("New time", c.time);
-
-  c.date = newDate;
-  c.time = newTime;
-
-  await fetch(`/edit/${i}`, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify(c)
-  });
-
-  loadData();
-}
-
-async function confirmPrice(i) {
-  const price = prompt("Enter price (₹)");
-  if (!price) return;
-
-  await fetch(`/confirm/${i}`, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ price })
-  });
-
-  loadData();
-}
-
-function openBill(i) {
-  window.open(`/bill/${i}`, "_blank");
+  html+="</table>";
+  document.getElementById("paymentTable").innerHTML=html;
 }
 
 /* INIT */
 loadData();
-setInterval(loadData, 5000);
-</script>
+setInterval(loadData,5000);
 
+</script>
 </body>
-</html> 
+</html>

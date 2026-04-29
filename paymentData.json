@@ -42,5 +42,21 @@
     "txnId": "",
     "note": "",
     "paidAt": "18/11/2025, 3:46:32 pm"
+  },
+  {
+    "bookingIndex": 0,
+    "bookingName": "mani",
+    "event": "Hair Coloring",
+    "amount": 1000,
+    "method": "Cash",
+    "paidAt": "25/4/2026, 1:47:21 pm"
+  },
+  {
+    "bookingIndex": 0,
+    "bookingName": "mani",
+    "event": "Birthday",
+    "amount": 0,
+    "method": "Cash",
+    "paidAt": "29/4/2026, 1:46:21 pm"
   }
 ]
