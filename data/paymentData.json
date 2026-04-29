@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "bookingIndex": 0,
+    "bookingName": "Prasanna devi s",
+    "event": "Haircut",
+    "amount": 250,
+    "method": "Cash",
+    "paidAt": "29/4/2026, 3:46:36 pm"
+  }
+]
