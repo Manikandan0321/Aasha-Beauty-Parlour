@@ -30,14 +30,22 @@ if (process.env.OPENAI_API_KEY) {
 }
 
 // ------------------- FILE PATHS -------------------
-const dataFile = path.join(__dirname, "contactData.json");
-const deletedFile = path.join(__dirname, "deletedData.json");
-const paymentFile = path.join(__dirname, "paymentData.json");
 
-// Create files if not exist
-[dataFile, deletedFile, paymentFile].forEach(file => {
+const dataDir = path.join(__dirname, "data");
+
+// create data folder
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir);
+}
+
+const dataFile = path.join(dataDir, "contactData.json");
+const deletedFile = path.join(dataDir, "deletedData.json");
+const paymentFile = path.join(dataDir, "paymentData.json");
+
+// create json files
+[dataFile, deletedFile, paymentFile].forEach((file) => {
   if (!fs.existsSync(file)) {
-    fs.writeFileSync(file, JSON.stringify([], null, 2));
+    fs.writeFileSync(file, "[]");
   }
 });
 
