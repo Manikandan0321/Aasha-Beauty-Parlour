@@ -411,11 +411,18 @@
 
     e.preventDefault();
 
+    const submitBtn =
+      document.querySelector("#contactForm button");
+
+    const responseMsg =
+      document.getElementById("responseMsg");
+
     const serviceValue =
       document.getElementById("service").value;
 
     // VALIDATION
     if(!serviceValue){
+
       alert("Please select service");
       return;
     }
@@ -453,10 +460,37 @@
         .value.trim()
     };
 
+    // EMPTY CHECK
+    if(
+      !data.name ||
+      !data.email ||
+      !data.phone ||
+      !data.event ||
+      !data.date ||
+      !data.time
+    ){
+
+      responseMsg.style.color = "red";
+      responseMsg.textContent =
+        "❌ Please fill all fields";
+
+      return;
+    }
+
     try{
 
+      // BUTTON LOADING
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Booking...";
+
+      responseMsg.style.color = "black";
+      responseMsg.textContent =
+        "⏳ Sending booking...";
+
       // SEND TO BACKEND
-      const res = await fetch("/submit",{
+      const res = await fetch(
+        window.location.origin + "/submit",
+      {
 
         method:"POST",
 
@@ -468,23 +502,37 @@
 
       });
 
+      // RESPONSE
+      const result = await res.json();
+
+      console.log("SERVER RESPONSE:", result);
+
       if(!res.ok){
-        throw new Error("Server Error");
+
+        throw new Error(
+          result.message || "Server Error"
+        );
       }
+
+      // SUCCESS MESSAGE
+      responseMsg.style.color = "green";
+
+      responseMsg.textContent =
+        "✅ Booking submitted successfully";
 
       // POPUP
       openPopup();
 
       // WHATSAPP MESSAGE
       const whatsappMessage = `
-New Booking
+ New Booking
 
-Name: ${data.name}
-Phone: ${data.phone}
-Service: ${data.event}
-Date: ${data.date}
-Time: ${data.time}
-Message: ${data.message || "No message"}
+ Name: ${data.name}
+ Phone: ${data.phone}
+ Service: ${data.event}
+ Date: ${data.date}
+ Time: ${data.time}
+ Message: ${data.message || "No message"}
 `;
 
       const phone = "919080734683";
@@ -495,38 +543,52 @@ Message: ${data.message || "No message"}
       // OPEN WHATSAPP
       window.open(whatsappURL, "_blank");
 
-      // RESET
-      document.getElementById("contactForm").reset();
-
-      // RESPONSE MESSAGE
-      document.getElementById("responseMsg").textContent =
-        "✅ Booking submitted successfully";
+      // RESET FORM
+      document
+        .getElementById("contactForm")
+        .reset();
 
     }
     catch(err){
 
       console.error("Submit Error:", err);
 
-      document.getElementById("responseMsg").textContent =
-        "❌ Something went wrong. Try again.";
+      responseMsg.style.color = "red";
 
+      responseMsg.textContent =
+        "❌ Booking failed. Try again.";
+
+      alert(
+        "Booking failed.\nCheck Render server or backend."
+      );
+
+    }
+    finally{
+
+      submitBtn.disabled = false;
+
+      submitBtn.innerText =
+        "Book Appointment";
     }
 
   });
 
   // OPEN POPUP
   function openPopup(){
-    document.getElementById("successPopup").style.display =
-      "flex";
+
+    document
+      .getElementById("successPopup")
+      .style.display = "flex";
   }
 
   // CLOSE POPUP
   function closePopup(){
-    document.getElementById("successPopup").style.display =
-      "none";
+
+    document
+      .getElementById("successPopup")
+      .style.display = "none";
   }
 
 </script>
-
 </body>
 </html>
