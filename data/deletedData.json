@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "name": "No Name",
+    "email": "mani9080734683@gmail.com",
+    "phone": "09080734683",
+    "event": "Beard Styling",
+    "date": "2026-05-05",
+    "time": "09:00",
+    "message": "",
+    "place": "Walk-in Client",
+    "price": 0,
+    "confirmed": false,
+    "submittedAt": "30/4/2026, 10:48:05 am",
+    "deletedAt": "30/4/2026, 10:48:47 am"
+  },
+  {
+    "name": "No Name",
+    "email": "mani9080734683@gmail.com",
+    "phone": "09080734683",
+    "event": "Hair Cut",
+    "date": "2026-01-12",
+    "time": "18:07",
+    "message": "hi thi is madhan",
+    "place": "Walk-in Client",
+    "price": 0,
+    "confirmed": false,
+    "submittedAt": "30/4/2026, 2:05:54 pm",
+    "deletedAt": "30/4/2026, 2:06:09 pm"
+  }
+]

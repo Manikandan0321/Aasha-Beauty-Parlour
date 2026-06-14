@@ -1,346 +1,1132 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Aasha Admin</title>
+
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Aasha Admin Dashboard</title>
 
 <style>
-body { font-family: Arial; background:#f5f5f5; margin:0; }
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f4f4f4;
+}
 
 /* HEADER */
-.top-bar {
-  background:black;
+
+.top-bar{
+  background:#111;
   color:white;
+  padding:20px;
+}
+
+.header-flex{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+.logo-box img{
+  width:75px;
+  height:75px;
+  object-fit:contain;
+}
+
+.top-bar h2{
+  font-size:28px;
+}
+
+.top-bar p{
+  color:#ccc;
+  margin-top:5px;
   text-align:center;
-  padding:15px;
 }
 
 /* STATS */
-.stats {
+
+.stats{
   display:grid;
-  grid-template-columns: repeat(4,1fr);
-  gap:10px;
-  padding:15px;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:15px;
+  padding:20px;
 }
-.card {
+
+.card{
   background:white;
-  padding:10px;
-  border-radius:8px;
+  padding:20px;
+  border-radius:12px;
   text-align:center;
-  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+  box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.card h3{
+  font-size:28px;
+  margin-bottom:8px;
+}
+
+/* REPORT SECTION */
+
+.report-box{
+  background:white;
+  margin:20px;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.report-box h3{
+  margin-bottom:15px;
+}
+
+.report-controls{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+
+.report-controls input{
+  padding:10px;
+  border:1px solid #ccc;
+  border-radius:8px;
+}
+
+.report-controls button{
+  background:#111;
+  color:white;
+  padding:10px 15px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+/* RECORDS */
+
+.record-section{
+  padding:0 20px 20px;
+}
+
+.record-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:15px;
+}
+
+.record-card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.record-card h3{
+  margin-bottom:10px;
+}
+
+.record-card p{
+  margin:10px 0;
+}
+
+/* ADD BUTTON */
+
+.add-client-box{
+  padding:0 20px 20px;
+}
+
+.add-btn{
+  background:#111;
+  color:white;
+  padding:12px 20px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:16px;
 }
 
 /* TABS */
-.tabs {
+
+.tabs{
   display:flex;
-  justify-content:center;
   gap:10px;
-  background:white;
-  padding:10px;
+  padding:0 20px 20px;
+  flex-wrap:wrap;
 }
-.tab-btn {
-  padding:6px 12px;
+
+.tab-btn{
+  padding:10px 18px;
   background:#ddd;
-  border-radius:5px;
+  border-radius:8px;
   cursor:pointer;
 }
-.tab-btn.active {
-  background:black;
+
+.tab-btn.active{
+  background:#111;
   color:white;
 }
 
 /* TABLE */
-table { width:100%; background:white; border-collapse:collapse; }
-th, td { padding:8px; text-align:center; }
-th { background:#111; color:white; }
+
+.table-wrap{
+  overflow:auto;
+  padding:0 20px 20px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:white;
+  min-width:1000px;
+}
+
+th{
+  background:#111;
+  color:white;
+}
+
+th,td{
+  padding:12px;
+  border-bottom:1px solid #eee;
+  text-align:center;
+}
 
 /* BUTTONS */
-button {
-  padding:4px 8px;
+
+button{
   border:none;
-  border-radius:5px;
+  border-radius:6px;
+  padding:7px 12px;
   color:white;
   cursor:pointer;
+  margin:2px;
 }
-.view { background:green; }
-.edit { background:orange; }
-.confirm { background:blue; }
-.delete { background:red; }
-.pay { background:purple; }
-.bill { background:#444; }
+
+.view{
+  background:green;
+}
+
+.confirm{
+  background:blue;
+}
+
+.delete{
+  background:red;
+}
+
+.pay{
+  background:purple;
+}
+
+.bill{
+  background:#444;
+}
 
 /* MODAL */
-.modal {
+
+.modal{
   display:none;
   position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
   background:rgba(0,0,0,0.7);
   justify-content:center;
   align-items:center;
+  z-index:999;
 }
-.modal-box {
+
+.modal-box{
   background:white;
-  padding:20px;
-  border-radius:10px;
-  width:300px;
+  width:95%;
+  max-width:450px;
+  padding:25px;
+  border-radius:12px;
 }
-.modal-box input, textarea {
+
+.modal-box h3{
+  margin-bottom:15px;
+}
+
+.modal-box input,
+.modal-box textarea,
+.modal-box select{
   width:100%;
-  margin:5px 0;
-  padding:6px;
+  padding:10px;
+  margin-bottom:10px;
+  border:1px solid #ccc;
+  border-radius:6px;
 }
+
+.modal-actions{
+  display:flex;
+  gap:10px;
+}
+
+.modal-actions button{
+  flex:1;
+}
+
+@media(max-width:600px){
+
+  .top-bar h2{
+    font-size:22px;
+  }
+
+}
+
 </style>
+
 </head>
 
 <body>
 
+<!-- HEADER -->
+
 <div class="top-bar">
-  <h2>Aasha Admin Dashboard</h2>
+
+  <div class="header-flex">
+
+    <div class="logo-box">
+      <img src="/assets/logo-1.png" alt="logo">
+    </div>
+
+    <div>
+      <h2>Aasha Beauty Parlour Admin</h2>
+      <p>Smart Salon Management Dashboard</p>
+    </div>
+
+  </div>
+
 </div>
 
 <!-- STATS -->
+
 <div class="stats">
-  <div class="card"><h3 id="total">0</h3>Total</div>
-  <div class="card"><h3 id="pendingCount">0</h3>Pending</div>
-  <div class="card"><h3 id="confirmedCount">0</h3>Confirmed</div>
-  <div class="card"><h3 id="revenue">₹0</h3>Revenue</div>
+
+  <div class="card">
+    <h3 id="total">0</h3>
+    <p>Total Clients</p>
+  </div>
+
+  <div class="card">
+    <h3 id="pendingCount">0</h3>
+    <p>Pending</p>
+  </div>
+
+  <div class="card">
+    <h3 id="confirmedCount">0</h3>
+    <p>Confirmed</p>
+  </div>
+
+  <div class="card">
+    <h3 id="revenue">₹0</h3>
+    <p>Total Revenue</p>
+  </div>
+
+</div>
+
+<!-- WEEKLY + MONTHLY -->
+
+<div class="record-section">
+
+  <div class="record-grid">
+
+    <div class="record-card">
+
+      <h3>📅 Weekly Report</h3>
+
+      <p>
+        Customers :
+        <span id="weeklyCustomers">0</span>
+      </p>
+
+      <p>
+        Revenue :
+        ₹<span id="weeklyRevenue">0</span>
+      </p>
+
+    </div>
+
+    <div class="record-card">
+
+      <h3>📆 Monthly Report</h3>
+
+      <p>
+        Customers :
+        <span id="monthlyCustomers">0</span>
+      </p>
+
+      <p>
+        Revenue :
+        ₹<span id="monthlyRevenue">0</span>
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- REPORT -->
+
+<div class="report-box">
+
+  <h3>📊 Download Reports</h3>
+
+  <div class="report-controls">
+
+    <input type="date" id="fromDate">
+
+    <input type="date" id="toDate">
+
+    <button onclick="generateReport()">
+      Generate Report
+    </button>
+
+    <button onclick="downloadCSV()">
+      Download CSV
+    </button>
+
+  </div>
+
+  <div id="reportResult"></div>
+
+</div>
+
+<!-- ADD CLIENT -->
+
+<div class="add-client-box">
+
+  <button class="add-btn" onclick="openAddClient()">
+    + Add Walk-in Client
+  </button>
+
 </div>
 
 <!-- TABS -->
+
 <div class="tabs">
-  <div class="tab-btn active" onclick="switchTab('pending',event)">Pending</div>
-  <div class="tab-btn" onclick="switchTab('confirmed',event)">Confirmed</div>
-  <div class="tab-btn" onclick="switchTab('payments',event)">Payments</div>
+
+  <div class="tab-btn active" onclick="switchTab('pending',event)">
+    Pending
+  </div>
+
+  <div class="tab-btn" onclick="switchTab('confirmed',event)">
+    Confirmed
+  </div>
+
+  <div class="tab-btn" onclick="switchTab('payments',event)">
+    Payments
+  </div>
+
 </div>
 
 <!-- PENDING -->
-<div id="pending">
+
+<div id="pending" class="table-wrap">
   <div id="pendingTable"></div>
 </div>
 
 <!-- CONFIRMED -->
-<div id="confirmed" style="display:none;">
+
+<div id="confirmed" class="table-wrap" style="display:none;">
   <div id="confirmedTable"></div>
 </div>
 
 <!-- PAYMENTS -->
-<div id="payments" style="display:none;">
+
+<div id="payments" class="table-wrap" style="display:none;">
   <div id="paymentTable"></div>
 </div>
 
 <!-- MODAL -->
-<div id="modal" class="modal">
+
+<div class="modal" id="modal">
+
   <div class="modal-box">
-    <h3>Edit Details</h3>
 
-    <input id="name">
-    <input id="email">
-    <input id="phone">
-    <input id="service">
-    <input id="date" type="date">
-    <input id="time" type="time">
-    <textarea id="message"></textarea>
+    <h3 id="modalTitle">Edit Client</h3>
 
-    <button onclick="saveEdit()" class="confirm">Save</button>
-    <button onclick="closeModal()" class="delete">Close</button>
+    <input type="text" id="name" placeholder="Client Name">
+
+    <input type="email" id="email" placeholder="Email">
+
+    <input type="text" id="phone" placeholder="Phone">
+
+    <select id="service">
+
+      <option value="">Select Service</option>
+
+      <option>Hair Cut</option>
+      <option>Facial</option>
+      <option>Hair Spa</option>
+      <option>Makeup</option>
+      <option>Bridal Makeup</option>
+      <option>Beard Styling</option>
+
+    </select>
+
+    <input type="date" id="date">
+
+    <input type="time" id="time">
+
+    <textarea id="message" placeholder="Message"></textarea>
+
+    <div class="modal-actions">
+
+      <button class="confirm" onclick="saveData()">
+        Save
+      </button>
+
+      <button class="delete" onclick="closeModal()">
+        Close
+      </button>
+
+    </div>
+
   </div>
+
 </div>
 
 <script>
 
-let allData=[];
-let payments=[];
-let currentIndex=null;
+let allData = [];
+let payments = [];
+let currentIndex = null;
+let addMode = false;
+let filteredReport = [];
 
 /* TAB */
+
 function switchTab(tab,e){
+
   document.getElementById("pending").style.display="none";
   document.getElementById("confirmed").style.display="none";
   document.getElementById("payments").style.display="none";
 
   document.getElementById(tab).style.display="block";
 
-  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll(".tab-btn")
+  .forEach(btn=>btn.classList.remove("active"));
+
   e.target.classList.add("active");
 
-  if(tab==="payments") loadPayments();
+  if(tab==="payments"){
+    loadPayments();
+  }
+
 }
 
-/* LOAD */
+/* LOAD DATA */
+
 async function loadData(){
-  const res = await fetch("/data");
-  allData = await res.json();
 
-  updateStats();
-  renderPending();
-  renderConfirmed();
+  try{
+
+    const res = await fetch("/data");
+
+    allData = await res.json();
+
+    updateStats();
+
+    renderPending();
+
+    renderConfirmed();
+
+  }
+
+  catch(err){
+
+    console.log(err);
+
+  }
+
 }
 
-/* STATS */
+/* UPDATE STATS */
+
 function updateStats(){
-  document.getElementById("total").innerText=allData.length;
 
-  const pending=allData.filter(d=>!d.confirmed);
-  const confirmed=allData.filter(d=>d.confirmed);
+  document.getElementById("total").innerText =
+  allData.length;
 
-  document.getElementById("pendingCount").innerText=pending.length;
-  document.getElementById("confirmedCount").innerText=confirmed.length;
+  const pending =
+  allData.filter(d=>!d.confirmed);
 
-  const revenue=confirmed.reduce((s,c)=>s+(c.price||0),0);
-  document.getElementById("revenue").innerText="₹"+revenue;
+  const confirmed =
+  allData.filter(d=>d.confirmed);
+
+  document.getElementById("pendingCount").innerText =
+  pending.length;
+
+  document.getElementById("confirmedCount").innerText =
+  confirmed.length;
+
+  const revenue =
+  confirmed.reduce((sum,item)=>
+  sum + (item.price || 0),0);
+
+  document.getElementById("revenue").innerText =
+  "₹" + revenue;
+
+  const now = new Date();
+
+  let weeklyCustomers = 0;
+  let weeklyRevenue = 0;
+
+  let monthlyCustomers = 0;
+  let monthlyRevenue = 0;
+
+  allData.forEach(item=>{
+
+    if(!item.submittedAt) return;
+
+    const createdDate =
+    new Date(item.submittedAt);
+
+    const diffTime =
+    now - createdDate;
+
+    const diffDays =
+    diffTime / (1000*60*60*24);
+
+    if(diffDays <= 7){
+
+      weeklyCustomers++;
+
+      weeklyRevenue += item.price || 0;
+
+    }
+
+    if(diffDays <= 30){
+
+      monthlyCustomers++;
+
+      monthlyRevenue += item.price || 0;
+
+    }
+
+  });
+
+  document.getElementById("weeklyCustomers")
+  .innerText = weeklyCustomers;
+
+  document.getElementById("weeklyRevenue")
+  .innerText = weeklyRevenue;
+
+  document.getElementById("monthlyCustomers")
+  .innerText = monthlyCustomers;
+
+  document.getElementById("monthlyRevenue")
+  .innerText = monthlyRevenue;
+
 }
 
 /* PENDING */
+
 function renderPending(){
-  let html=`<table>
-  <tr><th>Name</th><th>Service</th><th>Date</th><th>Actions</th></tr>`;
 
-  allData.filter(d=>!d.confirmed).forEach((d,i)=>{
-    const index=allData.indexOf(d);
+  let html = `
+  <table>
 
-    html+=`
+  <tr>
+    <th>Name</th>
+    <th>Phone</th>
+    <th>Service</th>
+    <th>Date</th>
+    <th>Actions</th>
+  </tr>
+  `;
+
+  allData
+  .filter(d=>!d.confirmed)
+  .forEach(d=>{
+
+    const index = allData.indexOf(d);
+
+    html += `
+
     <tr>
+
       <td>${d.name}</td>
+
+      <td>${d.phone}</td>
+
       <td>${d.event}</td>
+
       <td>${d.date}</td>
+
       <td>
-        <button class="view" onclick="view(${index})">View</button>
-        <button class="confirm" onclick="confirmBooking(${index})">Confirm</button>
-        <button class="delete" onclick="deleteBooking(${index})">Delete</button>
+
+        <button class="view"
+        onclick="viewClient(${index})">
+        View
+        </button>
+
+        <button class="confirm"
+        onclick="confirmBooking(${index})">
+        Confirm
+        </button>
+
+        <button class="delete"
+        onclick="deleteBooking(${index})">
+        Delete
+        </button>
+
       </td>
-    </tr>`;
+
+    </tr>
+    `;
   });
 
-  html+="</table>";
-  document.getElementById("pendingTable").innerHTML=html;
+  html += `</table>`;
+
+  document.getElementById("pendingTable").innerHTML =
+  html;
+
 }
 
 /* CONFIRMED */
+
 function renderConfirmed(){
-  let html=`<table>
-  <tr><th>Name</th><th>Service</th><th>Price</th><th>Actions</th></tr>`;
 
-  allData.filter(d=>d.confirmed).forEach(d=>{
-    const index=allData.indexOf(d);
+  let html = `
+  <table>
 
-    html+=`
+  <tr>
+    <th>Name</th>
+    <th>Service</th>
+    <th>Price</th>
+    <th>Actions</th>
+  </tr>
+  `;
+
+  allData
+  .filter(d=>d.confirmed)
+  .forEach(d=>{
+
+    const index = allData.indexOf(d);
+
+    html += `
+
     <tr>
+
       <td>${d.name}</td>
+
       <td>${d.event}</td>
-      <td>₹${d.price}</td>
+
+      <td>₹${d.price || 0}</td>
+
       <td>
-        <button class="pay" onclick="pay(${index})">Pay</button>
-        <button class="bill" onclick="bill(${index})">Bill</button>
+
+        <button class="pay"
+        onclick="pay(${index})">
+        Payment
+        </button>
+
+        <button class="bill"
+        onclick="bill(${index})">
+        Bill
+        </button>
+
       </td>
-    </tr>`;
+
+    </tr>
+
+    `;
   });
 
-  html+="</table>";
-  document.getElementById("confirmedTable").innerHTML=html;
+  html += `</table>`;
+
+  document.getElementById("confirmedTable").innerHTML =
+  html;
+
 }
 
-/* VIEW + EDIT */
-function view(i){
-  const d=allData[i];
-  currentIndex=i;
+/* ADD CLIENT */
 
-  name.value=d.name;
-  email.value=d.email;
-  phone.value=d.phone;
-  service.value=d.event;
-  date.value=d.date;
-  time.value=d.time;
-  message.value=d.message;
+function openAddClient(){
+
+  addMode = true;
+
+  currentIndex = null;
+
+  document.getElementById("modalTitle").innerText =
+  "Add Walk-in Client";
+
+  name.value="";
+  email.value="";
+  phone.value="";
+  service.value="";
+  date.value="";
+  time.value="";
+  message.value="";
 
   modal.style.display="flex";
+
 }
+
+/* VIEW CLIENT */
+
+function viewClient(i){
+
+  addMode = false;
+
+  currentIndex = i;
+
+  const d = allData[i];
+
+  document.getElementById("modalTitle").innerText =
+  "Edit Client";
+
+  name.value=d.name || "";
+  email.value=d.email || "";
+  phone.value=d.phone || "";
+  service.value=d.event || "";
+  date.value=d.date || "";
+  time.value=d.time || "";
+  message.value=d.message || "";
+
+  modal.style.display="flex";
+
+}
+
+/* CLOSE */
 
 function closeModal(){
+
   modal.style.display="none";
+
 }
 
-async function saveEdit(){
-  const updated={
+/* SAVE */
+
+async function saveData(){
+
+  const data = {
+
     name:name.value,
     email:email.value,
     phone:phone.value,
     event:service.value,
     date:date.value,
     time:time.value,
-    message:message.value
+    message:message.value,
+    place:"Walk-in Client"
+
   };
 
-  await fetch(`/edit/${currentIndex}`,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(updated)
-  });
+  try{
 
-  alert("Updated ✅");
-  closeModal();
-  loadData();
+    if(addMode){
+
+      await fetch("/submit",{
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify(data)
+
+      });
+
+      alert("Client Added ✅");
+
+    }
+
+    else{
+
+      await fetch(`/edit/${currentIndex}`,{
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify(data)
+
+      });
+
+      alert("Updated ✅");
+
+    }
+
+    closeModal();
+
+    loadData();
+
+  }
+
+  catch(err){
+
+    console.log(err);
+
+    alert("Something went wrong ❌");
+
+  }
+
 }
 
-/* ACTIONS */
+/* CONFIRM */
+
 async function confirmBooking(i){
-  const price=prompt("Enter price");
+
+  const price =
+  prompt("Enter Service Price");
+
   if(!price) return;
 
   await fetch(`/confirm/${i}`,{
+
     method:"POST",
-    headers:{"Content-Type":"application/json"},
+
+    headers:{
+      "Content-Type":"application/json"
+    },
+
     body:JSON.stringify({price})
+
   });
 
+  alert("Confirmed ✅");
+
   loadData();
+
 }
+
+/* DELETE */
 
 async function deleteBooking(i){
-  await fetch(`/delete/${i}`,{method:"DELETE"});
+
+  const ok =
+  confirm("Delete Client ?");
+
+  if(!ok) return;
+
+  await fetch(`/delete/${i}`,{
+    method:"DELETE"
+  });
+
   loadData();
+
 }
 
-function pay(i){
-  const amount=prompt("Enter amount");
-  fetch(`/payment/${i}`,{
+/* PAYMENT */
+
+async function pay(i){
+
+  const amount =
+  prompt("Enter Amount");
+
+  if(!amount) return;
+
+  await fetch(`/payment/${i}`,{
+
     method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({amount,method:"Cash"})
+
+    headers:{
+      "Content-Type":"application/json"
+    },
+
+    body:JSON.stringify({
+      amount,
+      method:"Cash"
+    })
+
   });
-  alert("Paid");
+
+  alert("Payment Saved ✅");
+
+  loadData();
+
 }
+
+/* BILL */
 
 function bill(i){
+
   window.open(`/bill/${i}`);
+
 }
 
 /* PAYMENTS */
-async function loadPayments(){
-  const res=await fetch("/payments");
-  payments=await res.json();
 
-  let html=`<table>
-  <tr><th>Name</th><th>Service</th><th>Amount</th></tr>`;
+async function loadPayments(){
+
+  const res =
+  await fetch("/payments");
+
+  payments =
+  await res.json();
+
+  let html = `
+
+  <table>
+
+  <tr>
+    <th>Name</th>
+    <th>Service</th>
+    <th>Amount</th>
+    <th>Method</th>
+  </tr>
+  `;
 
   payments.forEach(p=>{
-    html+=`
+
+    html += `
+
     <tr>
+
       <td>${p.bookingName}</td>
+
       <td>${p.event}</td>
+
       <td>₹${p.amount}</td>
-    </tr>`;
+
+      <td>${p.method}</td>
+
+    </tr>
+
+    `;
   });
 
-  html+="</table>";
-  document.getElementById("paymentTable").innerHTML=html;
+  html += `</table>`;
+
+  document.getElementById("paymentTable").innerHTML =
+  html;
+
+}
+
+/* REPORT */
+
+function generateReport(){
+
+  const from =
+  document.getElementById("fromDate").value;
+
+  const to =
+  document.getElementById("toDate").value;
+
+  if(!from || !to){
+
+    alert("Select dates");
+
+    return;
+
+  }
+
+  filteredReport = allData.filter(item=>{
+
+    if(!item.date) return false;
+
+    return item.date >= from &&
+    item.date <= to;
+
+  });
+
+  const totalCustomers =
+  filteredReport.length;
+
+  const confirmed =
+  filteredReport.filter(d=>d.confirmed);
+
+  const totalRevenue =
+  confirmed.reduce((sum,item)=>
+  sum + (item.price || 0),0);
+
+  let html = `
+
+  <div class="stats">
+
+    <div class="card">
+      <h3>${totalCustomers}</h3>
+      <p>Total Customers</p>
+    </div>
+
+    <div class="card">
+      <h3>${confirmed.length}</h3>
+      <p>Confirmed</p>
+    </div>
+
+    <div class="card">
+      <h3>₹${totalRevenue}</h3>
+      <p>Revenue</p>
+    </div>
+
+  </div>
+
+  `;
+
+  document.getElementById("reportResult").innerHTML =
+  html;
+
+}
+
+/* CSV */
+
+function downloadCSV(){
+
+  if(filteredReport.length===0){
+
+    alert("Generate report first");
+
+    return;
+
+  }
+
+  let csv =
+`Name,Service,Date,Status,Price\n`;
+
+  filteredReport.forEach(item=>{
+
+    csv +=
+`${item.name},
+${item.event},
+${item.date},
+${item.confirmed ? "Confirmed":"Pending"},
+${item.price || 0}\n`;
+
+  });
+
+  const blob =
+  new Blob([csv],{type:"text/csv"});
+
+  const url =
+  window.URL.createObjectURL(blob);
+
+  const a =
+  document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+  "Aasha_Report.csv";
+
+  a.click();
+
 }
 
 /* INIT */
+
 loadData();
+
 setInterval(loadData,5000);
 
 </script>
+
 </body>
 </html>
